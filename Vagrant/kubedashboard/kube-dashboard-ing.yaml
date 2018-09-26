@@ -93,7 +93,7 @@ spec:
   - port: 80
     protocol: TCP
     targetPort: 9090
-    nodePort: 31000
-  type: NodePort
+#    nodePort: 31000
+#  type: NodePort
   selector:
     k8s-app: kubernetes-dashboard

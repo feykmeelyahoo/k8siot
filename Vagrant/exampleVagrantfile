@@ -1,0 +1,44 @@
+# Example 4 node file with the template
+# Change the template name ub1604-kube-root
+# vagrant package --base your-vm-name
+# this create a file package.box
+# Add that base box to vagrant:
+# vagrant box add ubuntu-root file:///somepath/package.box
+
+
+VAGRANTFILE_API_VERSION = "2"
+
+$k8s_count=4
+
+$k8s_memory=3072
+$k8s_cpus=2
+
+def workerIP(num)
+  return "172.17.8.#{num+100}"
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  if Vagrant.has_plugin?("vagrant-vbguest") then
+    config.vbguest.auto_update = false
+  end
+  config.ssh.username = 'root'
+  config.ssh.password = 'root'
+  config.ssh.insert_key = 'true'
+config.vm.box = "ub1604-kube-root"
+  (1..$k8s_count).each do |i|
+    config.vm.define vm_name = "k8s-0%d" % i do |node|
+      node.vm.network :private_network, :ip => "#{workerIP(i)}"
+      node.vm.hostname = vm_name
+      node.vm.provider "virtualbox" do |v|
+        if i == 1
+          v.memory = $k8s_memory/2
+          v.cpus = $k8s_cpus/2
+        else
+          v.memory = $k8s_memory
+          v.cpus = $k8s_cpus
+        end
+      end
+      node.vm.provision :shell, :inline => "sed 's/127.0.0.1.*k8s-0#{i}/#{workerIP(i)} k8s-0#{i}/' -i /etc/hosts"
+    end
+  end
+end

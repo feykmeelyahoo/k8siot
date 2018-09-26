@@ -39,7 +39,7 @@ spec:
       app: cassandra
 
   serviceName: cassandra-headless
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -123,7 +123,7 @@ spec:
       #   volume.beta.kubernetes.io/storage-class: fast
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: rook-ceph-block
+      storageClassName: nfs
       resources:
         requests:
           storage: 3Gi
@@ -133,7 +133,7 @@ spec:
       #   volume.beta.kubernetes.io/storage-class: fast
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: rook-ceph-block
+      storageClassName: nfs
       resources:
         requests:
           storage: 2Gi

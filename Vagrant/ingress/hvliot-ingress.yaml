@@ -1,0 +1,17 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hvliot
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: hvliot.hvl.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tb-service
+          servicePort: 8080

@@ -114,7 +114,7 @@ spec:
       name: es-storage
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: rook-ceph-block
+      storageClassName: nfs
       resources:
         requests:
           storage: 8Gi
