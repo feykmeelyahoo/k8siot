@@ -1,6 +1,0 @@
-kubectl delete pvc cassandra-commitlog-cassandra-0
-kubectl delete pvc cassandra-commitlog-cassandra-1
-kubectl delete pvc cassandra-data-cassandra-0
-kubectl delete pvc cassandra-data-cassandra-1
-kubectl delete pvc redis-data-redis-0
-

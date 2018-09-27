@@ -10,8 +10,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 $k8s_count=4
 
-$k8s_memory=3072
-$k8s_cpus=2
+$k8s_memory=4096
+$k8s_cpus=1
 
 def workerIP(num)
   return "172.17.8.#{num+100}"
@@ -24,18 +24,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.username = 'root'
   config.ssh.password = 'root'
   config.ssh.insert_key = 'true'
-config.vm.box = "ub1604-kube-root"
+config.vm.box = "basdemirs/ub1604-kube-root"
   (1..$k8s_count).each do |i|
     config.vm.define vm_name = "k8s-0%d" % i do |node|
       node.vm.network :private_network, :ip => "#{workerIP(i)}"
       node.vm.hostname = vm_name
       node.vm.provider "virtualbox" do |v|
-        if i == 1
-          v.memory = $k8s_memory/2
-          v.cpus = $k8s_cpus/2
-        else
-          v.memory = $k8s_memory
-          v.cpus = $k8s_cpus
+        if i > 1
+          v.memory = 3*$k8s_memory/2
+          v.cpus = $k8s_cpus*2
         end
       end
       node.vm.provision :shell, :inline => "sed 's/127.0.0.1.*k8s-0#{i}/#{workerIP(i)} k8s-0#{i}/' -i /etc/hosts"
