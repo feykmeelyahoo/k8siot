@@ -77,8 +77,8 @@ resources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
-nodeSelector: 
-  kubernetes.io/hostname: 'ubuntu-k8s-03'
+# nodeSelector: 
+ #  kubernetes.io/hostname: 'k8s-03'
 
 tolerations: []
 
