@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: data-hvlnfs-server-provisioner-0
+  name: data-nfs-nfs-server-provisioner-0
 spec:
   capacity:
     storage: 200Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /srv/volumes/data-hvlnfs-server-provisioner-0
+    path: /srv/volumes/data-nfs-nfs-server-provisioner-0
   claimRef:
     # namespace: kube-system
     namespace: default
-    name: data-hvlnfs-nfs-server-provisioner-0
+    name: data-nfs-nfs-server-provisioner-0
