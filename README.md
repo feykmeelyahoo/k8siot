@@ -1,6 +1,6 @@
 ## useful plugins for auto completion to be inserted in .zshrc
 
-> git helm docker docker-compose docker-machine kubectl kube-ps1 zsh-autosuggestions  
+> git helm docker docker-compose docker-machine kubectl kube-ps1 zsh-autosuggestions vagrant vagrant-prompt
 source ~/.kubectl_aliases
 
 ## if two NICs available do the following for all k8s nodes and masters
