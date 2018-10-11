@@ -7,8 +7,9 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 spec:
-  type: LoadBalancer
-  externalTrafficPolicy: Local
+  type: NodePort
+  #  type: LoadBalancer
+  #  externalTrafficPolicy: Local
   ports:
     - name: http
       port: 80

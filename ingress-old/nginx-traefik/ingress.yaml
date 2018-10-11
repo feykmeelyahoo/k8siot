@@ -6,7 +6,8 @@ metadata:
     ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - http:
+  - host: fruits.hvl.com
+    http:
       paths:
         - path: /apple
           backend:
