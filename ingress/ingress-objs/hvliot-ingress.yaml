@@ -5,7 +5,8 @@ metadata:
   name: hvliot
   namespace: default
   annotations:
-    kubernetes.io/ingress.class: traefik
+    kubernetes.io/ingress.class: nginx                  # change to traefik if using traefik
+    nginx.ingress.kubernetes.io/rewrite-target: /       # delete if using traefik
 spec:
   rules:
   - host: hvliot.hvl.com

@@ -1,4 +1,4 @@
-# Kubernetes INGRESS
+# Kubernetes Ingress
  
 ingress controller en çok __NodePort, LoadBalancer__ servisleri üzerinden kurulur.
 
@@ -25,6 +25,8 @@ görülür.
 
 
 ## LoadBalancer ile çalışırken
+
+Loadbalancer bulut sağlayıcılarının verdiği bir hizmetken on-prem'de Metallb ile hayat buldu. Metallb kendisine nelirlenen pooldan bir IP'yi Ingress'e atar bu sayede tek IP üzerinden faklı isimler ile istenen servislere bağlanılır.
 
 # nginx-ingress kurulumu
 
