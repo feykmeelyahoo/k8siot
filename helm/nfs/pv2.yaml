@@ -11,5 +11,5 @@ spec:
     path: /srv/volumes/data-mynfs-nfs-server-provisioner-0
   claimRef:
     # namespace: kube-system
-    namespace: default
+    namespace: storage
     name: data-mynfs-nfs-server-provisioner-0

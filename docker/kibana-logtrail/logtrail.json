@@ -1,4 +1,5 @@
 {
+  "version" : 2,
   "index_patterns" : [
     {      
       "es": {
@@ -8,7 +9,7 @@
       "tail_interval_in_seconds": 10,
       "es_index_time_offset_in_seconds": 0,
       "display_timezone": "local",
-      "display_timestamp_format": "MMM DD HH:mm:ss SSSS",
+      "display_timestamp_format": "MMM DD HH:mm:ss",
       "max_buckets": 500,
       "nested_objects" : false,
       "default_time_range_in_days" : 0,
@@ -16,12 +17,16 @@
       "max_events_to_keep_in_viewer": 5000,
       "fields" : {
         "mapping" : {
-            "timestamp" : "@timestamp",
-            "display_timestamp" : "@timestamp",
-            "hostname" : "kubernetes.pod_name",
-            "program": "kubernetes.container_name",
-            "message": "log"
-        }
+          "timestamp" : "@timestamp",
+          "display_timestamp" : "@timestamp",
+          "hostname" : "kubernetes.pod_name",
+          "program": "kubernetes.container_name",
+          "message": "log"
+      },
+        "message_format": "{{{message}}}",
+        "keyword_suffix" : "keyword"
+      },
+      "color_mapping" : {
       }
     }
   ]

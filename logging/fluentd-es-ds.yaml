@@ -95,6 +95,10 @@ spec:
           readOnly: true
         - name: config-volume
           mountPath: /etc/fluent/config.d
+        - name: libsystemddir
+          mountPath: /host/lib
+          readOnly: true
+
       nodeSelector:
         beta.kubernetes.io/fluentd-ds-ready: "true"
       terminationGracePeriodSeconds: 30
@@ -108,3 +112,7 @@ spec:
       - name: config-volume
         configMap:
           name: fluentd-es-config-v0.1.5
+      # It is needed to copy systemd library to decompress journals
+      - name: libsystemddir
+        hostPath:
+          path: /usr/lib64

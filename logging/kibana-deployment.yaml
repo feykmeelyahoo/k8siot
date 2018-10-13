@@ -21,7 +21,10 @@ spec:
     spec:
       containers:
       - name: kibana-logging
-        image: docker.elastic.co/kibana/kibana-oss:6.3.2
+        image: 10.151.17.110/general/logging/kibana-logtrail-oss:6.3.2
+        # original is docker.elastic.co/kibana/kibana-oss:6.3.2 
+        # harbor image is 10.151.17.110/general/logging/kibana-logtrail-oss:6.3.2
+        # dockerhub image is basdemirs/kibana-logtrail-oss:6.3.2
         resources:
           # need more cpu upon initialization, therefore burstable class
           limits:
@@ -31,8 +34,15 @@ spec:
         env:
           - name: ELASTICSEARCH_URL
             value: http://elasticsearch-logging:9200
-          - name: SERVER_BASEPATH
-            value: /api/v1/namespaces/kube-system/services/kibana-logging/proxy
+# 	use this if you want to use proxy
+#          - name: SERVER_BASEPATH
+#            value: /api/v1/namespaces/kube-system/services/kibana-logging/proxy
+# 	!!! not working when below XPACK env set
+#   !!! need to work on it if necessary
+#          - name: XPACK_MONITORING_ENABLED
+#            value: "false"
+#          - name: XPACK_SECURITY_ENABLED
+#            value: "false"
         ports:
         - containerPort: 5601
           name: ui
