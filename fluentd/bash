@@ -1,0 +1,8 @@
+#!/bin/bash
+i=0
+while true
+do
+i=$(( i+1 ))
+echo "{\"log\":\"2018-10-18 10:00:30.$i I | mvcc: finished schedule at $i\",\"stream\":\"stderr\",\"time\":\"2018-10-18T10:05:30.258577826Z\"}" >> output.log
+sleep 1
+done
