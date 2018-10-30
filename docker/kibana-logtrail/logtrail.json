@@ -23,7 +23,7 @@
           "program": "kubernetes.container_name",
           "message": "log"
       },
-        "message_format": "{{{message}}}",
+        "message_format": "{{{log}}}",
         "keyword_suffix" : "keyword"
       },
       "color_mapping" : {
