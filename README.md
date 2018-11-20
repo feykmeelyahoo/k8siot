@@ -1,22 +1,27 @@
 ## useful plugins for auto completion to be inserted in .zshrc
 
-> git helm docker docker-compose docker-machine kubectl kube-ps1 zsh-autosuggestions vagrant vagrant-prompt
+```
+wget https://raw.githubusercontent.com/ahmetb/kubectl-aliases/master/.kubectl_aliases
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+```
+> git helm docker docker-compose docker-machine kubectl kube-ps1 zsh-autosuggestions zsh-syntax-highlighting vagrant vagrant-prompt
 
 > source ~/.kubectl_aliases
 
 ## if two NICs available add the following for all k8s nodes and masters
-> vi /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+> vi /etc/systemd/system/kubelet.service.d/10-kubeadm.conf yada  /etc/sysconfig/kubelet içerisine
 
-> "--node-ip=172.17.8.101"
+> "--node-ip=192.17.8.101"  # change the with your the IP of with the IP your desired NIC
 
 ```
 systemctl daemon-reload
 ```
 
-## start the master, change --apiserver-advertise-address=172.17.8.101 if necessary
+## start the master, change --apiserver-advertise-address=192.17.8.101 if necessary # change the with your the IP of with the IP your desired NIC
 ```console
 kubeadm config images pull #optional
-kubeadm init --apiserver-advertise-address=172.17.8.101 --pod-network-cidr=192.168.0.0/16
+kubeadm init --apiserver-advertise-address=192.17.8.101 --pod-network-cidr=192.168.0.0/16 # change the with your the IP of with the IP your desired NIC
 ```
 ## to make kubeadm master a scheduleable node 
 ```

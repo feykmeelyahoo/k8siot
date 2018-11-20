@@ -6,7 +6,7 @@ $k8s_memory=4096
 $k8s_cpus=1
 
 def workerIP(num)
-  return "172.17.8.#{num+100}"
+  return "192.17.8.#{num+100}"
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
