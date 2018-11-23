@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: es-config
+  namespace: evreka
+data:
+  ES_JAVA_OPTS: -Xms4g -Xmx4g
+  elasticsearch.yml: |
+    # Son Olarak Sildim discovery.zen.ping.unicast.hosts: evraka-node1
+    # Son Olarak Sildim discovery.zen.minimum_master_nodes: 1
+    # Son Olarak Sildim xpack.security.enabled: false
+    # Son Olarak Sildim xpack.monitoring.enabled: false
+    http.host: 0.0.0.0
+    # Uncomment the following lines for a production cluster deployment
+    #discovery.zen.minimum_master_nodes: 1
+    #discovery.zen.ping.unicast.hosts: 10.10.109.74
+    node.attr.rack: r1
+    cluster.name: evreka-test
+    node.name: evraka-node1
+    http.cors.enabled: true
+    http.cors.allow-origin: "/.*/"
+    #node.master: true
+    #node.data: true
+    http.enabled: true
+    #cluster.routing.allocation.disk.threshold_enabled: false
+    cluster.routing.allocation.disk.threshold_enabled: true
+    cluster.routing.allocation.disk.watermark.low: 3gb
+    cluster.routing.allocation.disk.watermark.high: 2gb
+    bootstrap.memory_lock: true
+
+    network:
+      bind_host: 0.0.0.0
+
+    http:
+      port: 9200
+
+    transport:
+      tcp:
+        port: 9300

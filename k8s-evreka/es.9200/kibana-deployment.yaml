@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kibana-logging
+  namespace: evreka
+  labels:
+    k8s-app: kibana-logging
+    kubernetes.io/cluster-service: "true"
+    addonmanager.kubernetes.io/mode: Reconcile
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: kibana-logging
+  template:
+    metadata:
+      labels:
+        k8s-app: kibana-logging
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
+    spec:
+      containers:
+      - name: kibana-logging
+        # image: 10.151.17.110/general/logging/kibana-logtrail-oss:6.3.2
+        image: docker.elastic.co/kibana/kibana:5.6.12
+        # original is docker.elastic.co/kibana/kibana-oss:6.3.2 
+        # harbor image is 10.151.17.110/general/logging/kibana-logtrail-oss:6.3.2
+        # dockerhub image is basdemirs/kibana-logtrail-oss:6.3.2
+        resources:
+          # need more cpu upon initialization, therefore burstable class
+          limits:
+            cpu: 1000m
+          requests:
+            cpu: 100m
+        env:
+          - name: ELASTICSEARCH_URL
+            value: http://elasticsearch:9200
+            # value: http://elasticsearch-logging:9200
+# 	use this if you want to use proxy
+#          - name: SERVER_BASEPATH
+#            value: /api/v1/namespaces/kube-system/services/kibana-logging/proxy
+# 	!!! not working when below XPACK env set
+#   !!! need to work on it if necessary
+          - name: XPACK_MONITORING_ENABLED
+            value: "false"
+          - name: XPACK_SECURITY_ENABLED
+            value: "false"
+        ports:
+        - containerPort: 5601
+          name: ui
+          protocol: TCP
