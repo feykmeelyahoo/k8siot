@@ -24,12 +24,12 @@ config.vm.box = "basdemirs/centos7-kubeadm"
     end
   config.vm.define vm_name = vmName do |node|
     if i == 1
-      node.vm.network :private_network, :ip => "192.17.8.100" 
+      node.vm.network :private_network, :ip => "192.168.0.100" 
       node.vm.network :private_network, :ip => "#{workerIP(i)}"
     elsif i == 2
       node.vm.network :private_network, :ip => "#{workerIP(i)}"
     else
-      node.vm.network :private_network, :ip => "192.17.8.101"
+      node.vm.network :private_network, :ip => "192.168.0.101"
     end
     node.vm.hostname = vmName
     node.vm.provider "virtualbox" do |v|

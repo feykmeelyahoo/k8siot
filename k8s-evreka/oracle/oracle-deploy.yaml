@@ -1,0 +1,107 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edbys-db
+  namespace: evreka
+spec:
+  # strategy:
+  #   type: RollingUpdate
+  #   rollingUpdate:
+  #     maxSurge: 1
+  #     maxUnavailable: 0
+  # revisionHistoryLimit: 4
+  # paused: false
+  replicas: 1
+  minReadySeconds: 40
+  selector:
+    matchLabels:
+      role: edbys-db
+  template:
+    metadata:
+      name: edbys-db
+      labels:
+        app: edbys-db
+        role: edbys-db
+        version: latest
+    spec:
+      imagePullSecrets:
+      - name: harbor
+      containers:
+      - name: edbys-db
+        # image: 10.151.17.110/edbys/sath89/oracle-xe-11g
+        image: sath89/oracle-xe-11g:latest
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "250m"
+        #   limits:
+        #     memory: "512Mi"
+        #     cpu: "500m"        
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 1521
+            name: edbys-db-port
+            protocol: TCP
+          - containerPort: 8080
+            name: edbysdbport2
+            protocol: TCP
+        #mount db-vol to postgres data path
+        volumeMounts:
+        - name: oracle-vol
+          mountPath: /u01/app/oracle
+        - name: tz-config
+          mountPath: /etc/localtime
+      #create a volume with pvc
+      volumes:
+      - name: oracle-vol
+        persistentVolumeClaim:
+          claimName: oracle-pvc
+      - name: tz-config
+        hostPath:
+          path: /etc/localtime
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: edbys-db
+  namespace: evreka
+  name: edbys-db
+spec:
+  ports:
+    - name: edbys-db
+      protocol: TCP
+      port: 1522
+      targetPort: edbys-db-port
+    - name: edbys-db-8080
+      protocol: TCP
+      port: 8080
+      targetPort: edbysdbport2
+  type: NodePort
+  selector:
+    app: edbys-db
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: cm-db
+  namespace: evreka
+  name: cm-db
+spec:
+  ports:
+    - name: cm-db
+      protocol: TCP
+      port: 1522
+      targetPort: edbys-db-port
+    - name: cm-db-8080
+      protocol: TCP
+      port: 8080
+      targetPort: edbysdbport2
+  type: NodePort
+  selector:
+    app: edbys-db

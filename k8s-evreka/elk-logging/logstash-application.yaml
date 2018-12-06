@@ -1,0 +1,161 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logserver
+  namespace: evreka
+data:
+  logstash.conf: |-
+    input {
+      gelf {
+      }
+    }
+    filter {
+      mutate {
+        convert => [ "statn.exec" , "integer" ]
+        convert => [ "statn.concurrency" , "integer" ]
+        convert => [ "statn.txcount" , "integer" ]
+        convert => [ "statn.cacheHitCount" , "integer" ]
+        convert => [ "statn.cacheHitTime" , "integer" ]
+        convert => [ "statn.cacheMissCount" , "integer" ]
+        convert => [ "statn.cacheMissTime" , "integer" ]
+        convert => [ "statn.cachePutCount" , "integer" ]
+        convert => [ "statn.cachePutTime" , "integer" ]
+        convert => [ "statn.count" , "integer" ]
+        convert => [ "statn.db" , "integer" ]
+        convert => [ "statn.deserialize" , "integer" ]
+        convert => [ "statn.flushCollectionCount" , "integer" ]
+        convert => [ "statn.flushCount" , "integer" ]
+        convert => [ "statn.flushEntityCount" , "integer" ]
+        convert => [ "statn.flushTime" , "integer" ]
+        convert => [ "statn.getProcessCpuLoad" , "integer" ]
+        convert => [ "statn.getSystemCpuLoad" , "integer" ]
+        convert => [ "statn.heapMemoryUsage" , "integer" ]
+        convert => [ "statn.jdbcConnAcquisitionCount" , "integer" ]
+        convert => [ "statn.jdbcConnAcquisitionTime" , "integer" ]
+        convert => [ "statn.jdbcConnReleaseCount" , "integer" ]
+        convert => [ "statn.jdbcConnReleaseTime" , "integer" ]
+        convert => [ "statn.jdbcExecBatchCount" , "integer" ]
+        convert => [ "statn.jdbcExecBatchTime" , "integer" ]
+        convert => [ "statn.jdbcExecStatementCount" , "integer" ]
+        convert => [ "statn.jdbcExecStatementTime" , "integer" ]
+        convert => [ "statn.jdbcPrepStatementCount" , "integer" ]
+        convert => [ "statn.jdbcPrepStatementTime" , "integer" ]
+        convert => [ "statn.partialFlushCollectionCount" , "integer" ]
+        convert => [ "statn.partialFlushCount" , "integer" ]
+        convert => [ "statn.partialFlushEntityCount" , "integer" ]
+        convert => [ "statn.partialFlushTime" , "integer" ]
+        convert => [ "statn.serialize" , "integer" ]
+        convert => [ "statn.size" , "integer" ]
+        convert => [ "statn.sqlcount" , "integer" ]
+        convert => [ "statn.squencerTime" , "integer" ]
+        convert => [ "statn.systemLoadAverage" , "integer" ]
+        convert => [ "statn.sessionCount" , "integer" ]
+      }
+    }
+    output {
+      elasticsearch {
+        #hosts => "elasticsearch-logging.elasticsearch:9200"
+        hosts => "elasticsearch-logging:9200"
+        # index => "logstash-%{+YYYY.MM.dd}"
+        # sniffing => false
+      }
+    }
+  logstash.yml: |-
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline
+    xpack.monitoring.enabled: false
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: logserver
+  namespace: evreka
+spec:
+  template:
+    metadata:
+      labels:
+        app: logserver
+    spec:
+      containers:
+      - image: 10.151.17.110/edbys/kutuni/elk.logstash:6.3.2
+        name: logserver
+        ports:
+        - name: logstash
+          containerPort: 5140
+          protocol: TCP
+        - name: logstash-2
+          containerPort: 12201
+          protocol: UDP
+        volumeMounts:
+        - name: config
+          mountPath: /usr/share/logstash/config/logstash.yml
+          subPath: logstash.yml
+          readOnly: true
+        - name: pipeline
+          mountPath: /usr/share/logstash/pipeline
+          readOnly: true
+        - name: logstash-vol
+          mountPath: /etc/logstash
+          readOnly: true
+        - name: tz-config
+          mountPath: /etc/localtime
+        args:
+        - -f
+        - /usr/share/logstash/pipeline/logstash.conf
+        resources:
+          limits:
+            memory: 2Gi
+            cpu: "200m"
+          requests:
+            memory: 2Gi
+            cpu: "200m"
+      volumes:
+      - name: pipeline
+        configMap:
+          name: logserver
+          items:
+          - key: logstash.conf
+            path: logstash.conf
+      - name: config
+        configMap:
+          name: logserver
+          items:
+          - key: logstash.yml
+            path: logstash.yml
+      - name: logstash-vol
+        persistentVolumeClaim:
+          claimName: logstash-pvc
+      - name: tz-config
+        hostPath:
+          path: /etc/localtime
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logserver
+  namespace: evreka
+  labels:
+    app: logserver
+spec:
+  type: NodePort
+  selector:
+    app: logserver
+  ports:
+  # Serkan Just in case
+  - name: logstash
+    port: 5440
+    targetPort: 5440
+    protocol: TCP
+  # Serkan Just in case
+  - name: logstash-1
+    port: 5044
+    targetPort: 5044
+    protocol: TCP
+  - name: logstash-2
+    port: 12201
+    targetPort: 12201
+    protocol: UDP

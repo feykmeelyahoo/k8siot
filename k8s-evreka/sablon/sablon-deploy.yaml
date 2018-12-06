@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ocrbot
+  name: sablon
   namespace: evreka
 spec:
   # strategy:
@@ -15,20 +15,20 @@ spec:
   minReadySeconds: 40
   selector:
     matchLabels:
-      role: ocrbot
+      role: sablon
   template:
     metadata:
-      name: ocrbot
+      name: sablon
       labels:
-        app: ocrbot
-        role: ocrbot
-        version: v1.3.6
+        app: sablon
+        role: sablon
+        version: 1.2.33
     spec:
-      imagePullSecrets:
-      - name: harbor
+      # imagePullSecrets:
+      # - name: harbor
       containers:
-      - name: ocrbot
-        image: 10.151.17.110/edbys/ocrboot:1.3.6
+      - name: sablon
+        image: 10.151.17.110/edbys/gk-sablon:1.2.33
         # resources:
         #   requests:
         #     memory: "64Mi"
@@ -38,34 +38,40 @@ spec:
         #     cpu: "500m"        
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: 4000
-            name: ocrbot-port
+          - containerPort: 5050
+            name: sablon-port-1
             protocol: TCP
-        env:
-        - name: "JAVA_OPTS"
-          value: "-Duser.timezone=GMT+3 -Djava.awt.headless=true -Xms128m -Xmx4g -XX:+UseCompressedOops -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"
+          - containerPort: 9595
+            name: sablon-port-2
+            protocol: TCP
         volumeMounts:
+        - name: sablon-vol
+          mountPath: /external/resources
         - name: tz-config
           mountPath: /etc/localtime
       volumes:
+      - name: sablon-vol
+        persistentVolumeClaim:
+          claimName: sablon-pvc
       - name: tz-config
         hostPath:
           path: /etc/localtime
-
-            
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ocr
+  name: sablon
   namespace: evreka
   labels:
-    role: ocr
+    role: sablon
 spec:
   selector:
-    role: ocrbot
+    role: sablon
   ports:
-    - port: 4000
-      targetPort: ocrbot-port
-      # nodePort: 4000
+    - port: 5050
+      name: sablon-port-1
+      targetPort: sablon-port-1
+    - port: 9595
+      name: sablon-port-2
+      targetPort: sablon-port-2
   type: NodePort

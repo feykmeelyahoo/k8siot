@@ -52,6 +52,8 @@ spec:
         - name: pipeline
           mountPath: /usr/share/logstash/pipeline
           readOnly: true
+        - name: tz-config
+          mountPath: /etc/localtime
         args:
         - -f
         - /usr/share/logstash/pipeline/logstash.conf
@@ -75,6 +77,10 @@ spec:
           items:
           - key: logstash.yml
             path: logstash.yml
+      - name: tz-config
+        hostPath:
+          path: /etc/localtime
+
 ---
 apiVersion: v1
 kind: Service

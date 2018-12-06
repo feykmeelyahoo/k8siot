@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cmhvl
+  namespace: evreka
+spec:
+  # strategy:
+  #   type: RollingUpdate
+  #   rollingUpdate:
+  #     maxSurge: 1
+  #     maxUnavailable: 0
+  # revisionHistoryLimit: 4
+  # paused: false
+  replicas: 1
+  # minReadySeconds: 40
+  selector:
+    matchLabels:
+      role: cmhvl
+  template:
+    metadata:
+      name: cmhvl
+      labels:
+        app: cmhvl
+        role: cmhvl
+        version: 3.4.740
+    spec:
+      # imagePullSecrets:
+      # - name: harbor
+      containers:
+      - name: cmhvl
+        # image: 10.151.17.110/edbys/hvlcm:3.4.740
+        image: 10.151.17.110/edbys/hvlcm-serkan:3.4.740
+        imagePullPolicy: IfNotPresent
+
+        # resources:
+        #   requests:
+        #     memory: "64Mi"
+        #     cpu: "250m"
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"        
+        ports:
+          - containerPort: 8000
+            name: cmhvl-port
+            protocol: TCP
+        env:
+        - name: "JAVA_OPTS"
+          value: "-Djava.awt.headless=true -XX:+UseCompressedOops -XX:-OmitStackTraceInFastThrow -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector -Djava.security.egd=file:/dev/./urandom -Duser.timezone=GMT+3 -Dspring.profiles.active=oracle,scm,admin -Xms128m -Xmx2g"
+        - name: "RUN_USER"
+          value: "vagrant"
+        - name: "RUN_USER_ID"
+          value: "1000"
+        volumeMounts:
+        - name: cm-vol
+          mountPath: /tomcat/conf
+        - name: cm-tmpfs-vol
+          mountPath: /tmpfs
+        - name: tz-config
+          mountPath: /etc/localtime
+      volumes:
+      - name: cm-vol
+        persistentVolumeClaim:
+          claimName: cm-pvc
+      - name: cm-tmpfs-vol
+        persistentVolumeClaim:
+          claimName: cm-tmpfs-pvc
+      - name: tz-config
+        hostPath:
+          path: /etc/localtime
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cm
+  namespace: evreka
+  labels:
+    role: cm
+spec:
+  selector:
+    role: cmhvl
+  ports:
+    - port: 8000
+      targetPort: cmhvl-port
+      # nodePort: 8000
+  type: NodePort
+
+
+
+  

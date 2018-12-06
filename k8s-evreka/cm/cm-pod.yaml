@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cm
+  labels:
+    app: cm
+    role: cm
+    version: v1
+spec:
+  containers:
+    - name: cm
+      image: 10.151.17.110/edbys/hvlcm:3.4.740
+      ports:
+        - containerPort: 8000
+          protocol: TCP
+      volumeMounts:
+      - name: cm-tmpfs-vol
+        mountPath: /tmp
+  volumes:
+  - name: cm-tmpfs-vol
+    emptyDir: {}

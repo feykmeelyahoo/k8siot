@@ -116,7 +116,7 @@ kubectl create secret docker-registry harbor \
 --docker-email=admin@admin.com\
 --docker-password='Harbor12345'
 ```
-####Example harbor secret usage ####
+> #### Example harbor secret usage ####
 
 ```
 apiVersion: v1
@@ -147,3 +147,27 @@ spec:
   imagePullSecrets:
   - name: harbor
 ```
+> ### Difference Between port, targetPort and nodePort
+https://stackoverflow.com/questions/49981601/difference-between-targetport-and-port-in-kubernetes-service-definition
+```
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: test-service
+  spec:
+    ports:
+    - port: 8080
+      targetPort: 8170 # containerPort On Pods defined in deploymant, statefulset etc...
+      nodePort: 33333
+      protocol: TCP 
+    selector:
+      component: test-service-app
+```
+Pay attention to some of the following in above spec:
+
+The port is 8080 which represents that test-service can be accessed by other services in the cluster at port 8080. The targetPort is 8170 which represents the test-service is actually running on port 8170 on pods The nodePort is 33333 which represents that test-service can be accessed via kube-proxy on port 33333.
+
+> #### Q&A 
+> Question - Reading some of the comments in the client code, they mention that targetPort is optional. So how does kubernetes decide what port of the pod to expose? Does it default to a particular value?
+> 
+> Answer - "By default the targetPort will be set to the same value as the port field." (kubernetes.io/docs/concepts/services-networking/service/…). So by default, Kubernetes assumes the port that's exposed inside the cluster, is the same as the port exposed directly by the pod.

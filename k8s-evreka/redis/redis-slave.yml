@@ -1,0 +1,104 @@
+#
+# Copyright © 2016-2018 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: redis-slave
+  name: redis-slave
+  namespace: evreka
+spec:
+  ports:
+    - name: redis-slave
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  selector:
+    app: redis-master
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-slave-conf
+  namespace: evreka
+data:
+  redis.conf: |
+    appendonly yes
+    slaveof redis-master 6379
+    protected-mode no
+    bind 0.0.0.0
+    port 6379
+    # dir /var/lib/redis
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: redis-slave
+  namespace: evreka
+spec:
+  serviceName: redis-slave
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis-slave
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: redis-slave
+        image: 10.151.17.110/edbys/redis:5.0
+        command:
+        - redis-server
+        args:
+        - /etc/redis/redis.conf
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 6379
+          name: redis
+        volumeMounts:
+        # - name: redis-slave-data
+        #   mountPath: /var/lib/redis
+        - name: redis-slave-conf
+          mountPath: /etc/redis
+        - name: tz-config
+          mountPath: /etc/localtime
+      volumes:
+      - name: tz-config
+        hostPath:
+          path: /etc/localtime
+      - name: redis-slave-conf
+        configMap:
+          name: redis-slave-conf
+          items:
+            - key: redis.conf
+              path: redis.conf
+#   volumeClaimTemplates:
+#   - metadata:
+#       name: redis-slave-data
+# #        annotations:
+# #          volume.beta.kubernetes.io/storage-class: fast
+#       spec:
+#         accessModes: [ "ReadWriteOnce" ]
+#         storageClassName: nfs
+#         resources:
+#           requests:
+#             storage: 1Gi

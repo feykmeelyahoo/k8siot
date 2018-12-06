@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edbysvs
+  namespace: evreka
+spec:
+  # strategy:
+  #   type: RollingUpdate
+  #   rollingUpdate:
+  #     maxSurge: 1
+  #     maxUnavailable: 0
+  # revisionHistoryLimit: 4
+  # paused: false
+  replicas: 1
+  minReadySeconds: 40
+  selector:
+    matchLabels:
+      role: edbysvs
+  template:
+    metadata:
+      name: edbysvs
+      labels:
+        app: edbysvs
+        role: edbysvs
+        version: 1.0.971
+    spec:
+      # serviceAccountName: elasticsearch-logging
+      # securityContext:
+      #   runAsUser: 1000
+      #   fsGroup: 2000
+      # imagePullSecrets:
+      # - name: harbor
+      containers:
+      - name: edbysvs
+        # image: 10.151.17.110/edbys/edbys:1.0.971
+        # image: 10.151.17.110/edbys/edbysvs:dev.3307
+        image: 10.151.17.110/edbys/edbysvs-serkan:dev.3307
+        # resources:
+        #   requests:
+        #     memory: "64Mi"
+        #     cpu: "250m"
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"        
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8000
+            name: edbysvs-port
+            protocol: TCP
+        env:
+        - name: "JAVA_OPTS"
+          value: "-server -Duser.timezone=GMT+3 -Xms256M -Xmx1g -Djava.awt.headless=true -XX:+UseCompressedOops -Dspring.profiles.active=oracle,db,genkur"
+        volumeMounts:
+        - name: edbysvs-vol
+          mountPath: /tomcat/conf
+        - name: tz-config
+          mountPath: /etc/localtime
+        # securityContext:
+        #   allowPrivilegeEscalation: false
+
+      volumes:
+      - name: edbysvs-vol
+        persistentVolumeClaim:
+          claimName: edbysvs-pvc
+      - name: tz-config
+        hostPath:
+          path: /etc/localtime
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edbysvs
+  namespace: evreka
+  labels:
+    role: edbysvs
+spec:
+  selector:
+    role: edbysvs
+  ports:
+    - port: 5001
+      name: edbysvs-port
+      targetPort: edbysvs-port
+  type: NodePort

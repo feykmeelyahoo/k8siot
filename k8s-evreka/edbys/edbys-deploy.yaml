@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edbys
+  namespace: evreka
+spec:
+  # strategy:
+  #   type: RollingUpdate
+  #   rollingUpdate:
+  #     maxSurge: 1
+  #     maxUnavailable: 0
+  # revisionHistoryLimit: 4
+  # paused: false
+  replicas: 1
+  minReadySeconds: 40
+  selector:
+    matchLabels:
+      role: edbys
+  template:
+    metadata:
+      name: edbys
+      labels:
+        app: edbys
+        role: edbys
+        version: 1.0.971
+    spec:
+      # serviceAccountName: elasticsearch-logging
+      # securityContext:
+      #   runAsUser: 1000
+      #   fsGroup: 2000
+      # imagePullSecrets:
+      # - name: harbor
+      containers:
+      - name: edbys
+        # image: 10.151.17.110/edbys/edbys:1.0.971
+        # image: 10.151.17.110/edbys/edbys:dev.3254
+        image: 10.151.17.110/edbys/edbys-serkan:dev.3254
+        # resources:
+        #   requests:
+        #     memory: "64Mi"
+        #     cpu: "250m"
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"        
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8000
+            name: edbys-port
+            protocol: TCP
+          - containerPort: 9000
+            name: edbys-port2
+            protocol: TCP
+        env:
+        - name: "JAVA_OPTS"
+          value: "-server -Duser.timezone=GMT+3 -Dlog4j.configurationFile=file:/tomcat/conf/log4j2.xml -Xms1g -Xmx4g -Djava.awt.headless=true -XX:+UseCompressedOops  -Dspring.profiles.active=oracle,db,genkur,scm -Dedbys.home=/edbys -Xdebug -Xrunjdwp:transport=dt_socket,address=9000,server=y,suspend=n"
+        volumeMounts:
+        - name: edbys-vol
+          mountPath: /tomcat/conf
+        - name: tz-config
+          mountPath: /etc/localtime
+        # securityContext:
+        #   allowPrivilegeEscalation: false
+
+      volumes:
+      - name: edbys-vol
+        persistentVolumeClaim:
+          claimName: edbys-pvc
+      - name: tz-config
+        hostPath:
+          path: /etc/localtime
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edbys
+  namespace: evreka
+  labels:
+    role: edbys
+spec:
+  selector:
+    role: edbys
+  ports:
+    - port: 6001
+      name: edbys-port
+      targetPort: edbys-port
+    - port: 9000
+      name: edbys-port2
+      targetPort: edbys-port2
+  type: NodePort

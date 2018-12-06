@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kyportal
+  namespace: evreka
+spec:
+  # strategy:
+  #   type: RollingUpdate
+  #   rollingUpdate:
+  #     maxSurge: 1
+  #     maxUnavailable: 0
+  # revisionHistoryLimit: 4
+  # paused: false
+  replicas: 1
+  minReadySeconds: 40
+  selector:
+    matchLabels:
+      role: kyportal
+  template:
+    metadata:
+      name: kyportal
+      labels:
+        app: kyportal
+        role: kyportal
+        version: 1.0.971
+    spec:
+      # serviceAccountName: elasticsearch-logging
+      # securityContext:
+      #   runAsUser: 1000
+      #   fsGroup: 2000
+      # imagePullSecrets:
+      # - name: harbor
+      containers:
+      - name: kyportal
+        # image: 10.151.17.110/edbys/kyportal:1.0.971
+        image: 10.151.17.110/edbys/kyportal-serkan:1.0.971
+        # resources:
+        #   requests:
+        #     memory: "64Mi"
+        #     cpu: "250m"
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"        
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8000
+            name: kyportal-port
+            protocol: TCP
+        env:
+        - name: "JAVA_OPTS"
+          value: "-server -Duser.timezone=GMT+3 -Xms1g -Xmx4g  -Dlog4j.configurationFile=file:/tomcat/conf/log4j.xml  -Djava.awt.headless=true -XX:+UseCompressedOops -Dspring.profiles.active=db,rcm,kulydev,oracle"
+        volumeMounts:
+        - name: kyportal-vol
+          mountPath: /tomcat/conf
+        - name: tz-config
+          mountPath: /etc/localtime
+        # securityContext:
+        #   allowPrivilegeEscalation: false
+
+      volumes:
+      - name: kyportal-vol
+        persistentVolumeClaim:
+          claimName: kyportal-pvc
+      - name: tz-config
+        hostPath:
+          path: /etc/localtime
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kyportal
+  namespace: evreka
+  labels:
+    role: kyportal
+spec:
+  selector:
+    role: kyportal
+  ports:
+    - port: 7500
+      name: kyportal-port
+      targetPort: kyportal-port
+  type: NodePort
