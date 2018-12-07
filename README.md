@@ -41,7 +41,7 @@ docker volume prune
 >restart all nodes
 
 >remove directories /etc/kubernetes except manifests directory and /var/lib/kubelet/*
-
+>sudo rm -rf /etc/kubernetes /var/lib/kubelet /var/lib/etcd             
 ```
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
