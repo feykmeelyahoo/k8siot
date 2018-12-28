@@ -59,7 +59,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
       - name: cassandra
-        image: cassandra:3.11.2
+        image: thingsboard/cassandra:2.1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 7000
@@ -123,7 +123,7 @@ spec:
       #   volume.beta.kubernetes.io/storage-class: fast
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: nfs-client
+      storageClassName: nfs
       resources:
         requests:
           storage: 3Gi
@@ -133,7 +133,7 @@ spec:
       #   volume.beta.kubernetes.io/storage-class: fast
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: nfs-client
+      storageClassName: nfs
       resources:
         requests:
           storage: 2Gi

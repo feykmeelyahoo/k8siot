@@ -29,8 +29,8 @@ spec:
         emptyDir: {}
       containers:
       - name: metrics-server
-        image: k8s.gcr.io/metrics-server-amd64:v0.3.0
-        imagePullPolicy: Always
+        image: k8s.gcr.io/metrics-server-amd64:v0.3.1
+        imagePullPolicy: IfNotPresent
         command:
         - /metrics-server
         - --logtostderr

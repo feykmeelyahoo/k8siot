@@ -50,13 +50,19 @@ metadata:
 data:
   zookeeper.enabled: "true"
   zookeeper.url: "zk-headless"
-  cassandra.url: "cassandra-headless:9042"
-  cassandra.host: "cassandra-headless"
+  cassandra.url: "my-release-cassandra-headless:9042"
+  cassandra.host: "my-release-cassandra-headless"
   cassandra.port: "9042"
-  database.type: "cassandra"
+  database.ts.type: "cassandra"
+  database.entities.type: "cassandra"
   cache.type: "redis"
   redis.host: "redis-service"
   ui-port: "8080"
+  add_schema_and_system_data: "false"
+  add_demo_data: "false"
+  db-user: "admin"
+  db-password: "admin"
+  db-cred: "true"
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -64,7 +70,7 @@ metadata:
   name: tb
 spec:
   serviceName: "tb-service"
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -84,8 +90,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
       - name: tb
-        # imagePullPolicy: Always
-        # image: thingsboard/application:2.1.0
+        imagePullPolicy: IfNotPresent
         image: hvl/egys:2.1.0
         ports:
         - containerPort: 8080
@@ -122,11 +127,16 @@ spec:
             configMapKeyRef:
               name: tb-config
               key: cassandra.url
-        - name: DATABASE_TYPE
+        - name: DATABASE_TS_TYPE
           valueFrom:
             configMapKeyRef:
               name: tb-config
-              key: database.type
+              key: database.ts.type
+        - name: DATABASE_ENTITIES_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: tb-config
+              key: database.entities.type
         - name : RPC_HOST
           valueFrom:
             fieldRef:
@@ -141,6 +151,31 @@ spec:
             configMapKeyRef:
               name: tb-config
               key: redis.host
+        - name: ADD_SCHEMA_AND_SYSTEM_DATA
+          valueFrom:
+            configMapKeyRef:
+              name: tb-config
+              key: add_schema_and_system_data
+        - name: ADD_DEMO_DATA
+          valueFrom:
+            configMapKeyRef:
+              name: tb-config
+              key: add_demo_data
+        - name: CASSANDRA_USE_CREDENTIALS
+          valueFrom:
+            configMapKeyRef:
+              name: tb-config
+              key: db-cred
+        - name: CASSANDRA_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: tb-config
+              key: db-user
+        - name: CASSANDRA_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: tb-config
+              key: db-password
         command:
         - sh
         - -c
