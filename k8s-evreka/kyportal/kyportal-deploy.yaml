@@ -48,7 +48,7 @@ spec:
             protocol: TCP
         env:
         - name: "JAVA_OPTS"
-          value: "-server -Duser.timezone=GMT+3 -Xms1g -Xmx4g  -Dlog4j.configurationFile=file:/tomcat/conf/log4j.xml  -Djava.awt.headless=true -XX:+UseCompressedOops -Dspring.profiles.active=db,rcm,kulydev,oracle"
+          value: "-server -Duser.timezone=GMT+3 -Xms1g -Xmx4g  -Dlog4j.configurationFile=file:/tomcat/conf/log4j.xml  -Djava.awt.headless=true -XX:+UseCompressedOops -Dspring.profiles.active=db,scm,kulydev,oracle"
         volumeMounts:
         - name: kyportal-vol
           mountPath: /tomcat/conf

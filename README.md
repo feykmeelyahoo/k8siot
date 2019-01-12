@@ -37,7 +37,7 @@ POWERLEVEL9K_CUSTOM_JAVASCRIPT_BACKGROUND="yellow"
 ## if two NICs available add the following for all k8s nodes and masters
 > vi /etc/systemd/system/kubelet.service.d/10-kubeadm.conf yada  /etc/sysconfig/kubelet içerisine
 
-> "--node-ip=192.17.8.101"  # change the with your the IP of with the IP your desired NIC
+> "--node-ip=192.168.104.101"  # change the with your the IP of with the IP your desired NIC
 
 ```
 systemctl daemon-reload
