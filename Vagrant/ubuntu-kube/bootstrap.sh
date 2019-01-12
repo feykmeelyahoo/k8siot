@@ -32,6 +32,8 @@ else
     sudo apt-get install -y docker.io
     echo ">>> Adding vagrant user to docker group"
     sudo usermod -aG docker vagrant
+    sudo systemctl start docker
+    sudo systemctl enable docker
 fi
 
 kubeadm > /dev/null 2>&1
@@ -55,12 +57,30 @@ EOF'
     myIP=$1
     sed  -i $'/KUBELET_EXTRA_ARGS/c KUBELET_EXTRA_ARGS=  --node-ip='${myIP}'' $kubeletPlace
 
-    echo  Europe/Istanbul > /etc/timezone
+    export LC_ALL="en_US.UTF-8"
+    export LC_CTYPE="en_US.UTF-8"
+    dpkg-reconfigure --frontend noninteractive locales 
+
+    # echo "Europe/Istanbul" | sudo tee /etc/timezone
+    ln -fs /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
+    dpkg-reconfigure --frontend noninteractive tzdata
+
+    swapoff -a
+    sed -i '/ swap / s/^/#/' /etc/fstab    
+    cat /etc/hosts /vagrant/appendhosts | sudo tee /etc/hosts   
+
+    echo ">>> INSTALLING kubens kubectx installation"
+    git clone https://github.com/ahmetb/kubectx /opt/kubectx
+    ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
+    ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+
+    echo ">>> INSTALLING Helm !!!"
+    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.12.1-linux-amd64.tar.gz
+    tar -zxf helm-v2.12.1-linux-amd64.tar.gz
+    mv linux-amd64/helm /usr/local/bin/helm
+    rm -rf linux-amd64 helm-v2.12.1-linux-amd64.tar.gz
     
-    sudo swapoff -a
-    sudo sed -i '/ swap / s/^/#/' /etc/fstab    
-    
-    echo ">>> Do vagrant reload !!!"
+    echo ">>> Appended hosts, now, time to do vagrant reload !!!"
     # sudo shutdown now -r
 fi
 

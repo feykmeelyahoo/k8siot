@@ -1,6 +1,6 @@
 VAGRANTFILE_API_VERSION = "2"
 
-$k8s_count=2
+$k8s_count=1
 
 $k8s_memory=8192
 $k8s_cpus=2
@@ -26,6 +26,8 @@ config.vm.box = "bento/ubuntu-18.04"
       apt-get update
       apt-get upgrade -y
       apt-get install -y zsh vim git mlocate ldap-utils gnutls-bin ssl-cert tmux nfs-common
+      systemctl stop ufw
+      systemctl disable ufw
   #    yum update -y
   #    yum install mlocate  -y
   #    yum install docker-ce  -y
@@ -38,10 +40,10 @@ config.vm.box = "bento/ubuntu-18.04"
   #    updatedb
     SHELL
     config.vm.provision :shell, :path => "onlyOnceOhmyzsh.sh"
-    config.vm.provision :shell, :path => "bootstrap.sh", :args => "#{workerIP(i)}"
     config.vm.provision :shell, :path => "onlyOnceOhmyzsh.sh", privileged: false
     # Change the vagrant user's shell to use zsh
     config.vm.provision :shell, inline: "chsh -s /bin/zsh vagrant"
+    config.vm.provision :shell, :path => "bootstrap.sh", :args => "#{workerIP(i)}"
 
   end
 end
