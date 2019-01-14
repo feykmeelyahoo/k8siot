@@ -8,7 +8,8 @@ OHMY_ZSH_INSTALLED=$?
 if [ $OHMY_ZSH_INSTALLED -eq 0 ]; then
     echo "Zsh Already Installed"
 else
-
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    cp /vagrant/etc/vimrc ~/.vimrc
     sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
 #    wget https://raw.githubusercontent.com/ahmetb/kubectl-aliases/master/.kubectl_aliases ~

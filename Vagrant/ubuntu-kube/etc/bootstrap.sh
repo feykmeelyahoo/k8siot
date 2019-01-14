@@ -15,7 +15,7 @@ if [ $CERT_INSTALLED -eq 0 ]; then
     echo "Cert Already Installed"
 else
     echo "Installing Cert"
-    sudo cp /vagrant/PCAcer.crt /usr/local/share/ca-certificates
+    sudo cp /vagrant/etc/PCAcer.crt /usr/local/share/ca-certificates
     sudo update-ca-certificates 
 
     HOSTNAME=$(hostname)
@@ -57,17 +57,13 @@ EOF'
     myIP=$1
     sed  -i $'/KUBELET_EXTRA_ARGS/c KUBELET_EXTRA_ARGS=  --node-ip='${myIP}'' $kubeletPlace
 
-    export LC_ALL="en_US.UTF-8"
-    export LC_CTYPE="en_US.UTF-8"
-    dpkg-reconfigure --frontend noninteractive locales 
-
     # echo "Europe/Istanbul" | sudo tee /etc/timezone
     ln -fs /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
     dpkg-reconfigure --frontend noninteractive tzdata
 
     swapoff -a
     sed -i '/ swap / s/^/#/' /etc/fstab    
-    cat /etc/hosts /vagrant/appendhosts | sudo tee /etc/hosts   
+    cat /etc/hosts /vagrant/etc/appendhosts | sudo tee /etc/hosts   
 
     echo ">>> INSTALLING kubens kubectx installation"
     git clone https://github.com/ahmetb/kubectx /opt/kubectx
