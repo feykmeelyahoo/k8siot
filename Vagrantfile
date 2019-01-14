@@ -39,11 +39,11 @@ config.vm.box = "bento/ubuntu-18.04"
   #    usermod -aG docker vagrant
   #    updatedb
     SHELL
-    config.vm.provision :shell, :path => "etc/setLocale.sh"
-    config.vm.provision :shell, :path => "etc/shellVimExtras.sh"
-    config.vm.provision :shell, :path => "etc/shellVimExtras.sh", privileged: false
+    config.vm.provision :shell, :path => "vagrantscripts/setLocale.sh"
+    config.vm.provision :shell, :path => "vagrantscripts/shellVimExtras.sh"
+    config.vm.provision :shell, :path => "vagrantscripts/shellVimExtras.sh", privileged: false
     # Change the vagrant user's shell to use zsh
     config.vm.provision :shell, inline: "chsh -s /bin/zsh vagrant"
-    config.vm.provision :shell, :path => "etc/bootstrap.sh", :args => "#{workerIP(i)}"
+    config.vm.provision :shell, :path => "vagrantscripts/bootstrap.sh", :args => "#{workerIP(i)}"
   end
 end

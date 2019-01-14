@@ -15,7 +15,7 @@ if [ $CERT_INSTALLED -eq 0 ]; then
     echo "Cert Already Installed"
 else
     echo "Installing Cert"
-    sudo cp /vagrant/etc/PCAcer.crt /usr/local/share/ca-certificates
+    sudo cp /vagrant/vagrantscripts/PCAcer.crt /usr/local/share/ca-certificates
     sudo update-ca-certificates 
 
     HOSTNAME=$(hostname)
@@ -63,7 +63,7 @@ EOF'
 
     swapoff -a
     sed -i '/ swap / s/^/#/' /etc/fstab    
-    cat /etc/hosts /vagrant/etc/appendhosts | sudo tee /etc/hosts   
+    cat /etc/hosts /vagrant/vagrantscripts/appendhosts | sudo tee /etc/hosts   
 
     echo ">>> INSTALLING kubens kubectx installation"
     git clone https://github.com/ahmetb/kubectx /opt/kubectx
