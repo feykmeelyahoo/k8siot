@@ -1,3 +1,9 @@
+# Aşağıdaki linklere bak
+DEPRECATED https://github.com/helm/charts/tree/master/stable/fluentd-elasticsearch
+https://github.com/kiwigrid/helm-charts/tree/master/charts
+
+# Buradan aşağısı eski yazdıklarım
+
 # Elasticsearch Add-On 
 
 ***İlk önce bur adresteki açıklamaları okuyun!!!***>https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch
