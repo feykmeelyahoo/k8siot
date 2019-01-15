@@ -2,7 +2,7 @@
 # check if a go version is set
 
 clear
-if grep "LC_CTYPE" /vagrantscripts/default/locale > /dev/null
+if grep "LC_CTYPE" /etc/default/locale > /dev/null
 then
     echo "locale exists"
 else

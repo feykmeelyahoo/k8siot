@@ -2,7 +2,13 @@
 # check if a go version is set
 
 clear
+echo #################
+echo #################
+echo #################
 echo $0 $1
+echo #################
+echo #################
+echo #################
 
 apt-get update
 apt-get upgrade -y

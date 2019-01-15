@@ -7,6 +7,7 @@ call plug#begin('~/.vim/plugged')
 	Plug 'ap/vim-css-color'
 	Plug 'flazz/vim-colorschemes'
 	Plug 'terryma/vim-multiple-cursors'
+        Plug 'markcornick/vim-vagrant'
 
 " Initialize plugin system
 call plug#end()
