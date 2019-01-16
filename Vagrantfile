@@ -2,7 +2,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 $k8s_count=3
 
-$k8s_memory=4192
+$k8s_memory=8192
 $k8s_cpus=2
 
 def workerIP(num)
@@ -18,8 +18,16 @@ config.vm.box = "bento/ubuntu-18.04"
       node.vm.network :private_network, :ip => "#{workerIP(i)}"
       node.vm.hostname = vm_name
       node.vm.provider "virtualbox" do |v|
-        v.memory = $k8s_memory
-        v.cpus = $k8s_cpus
+        if i == 1                       
+          v.memory = 3072
+          v.cpus = 1
+        elsif i == 2                       
+          v.memory = 10240
+          v.cpus = 3
+        else                            
+          v.memory = 8192
+          v.cpus = 2
+        end                             
       end
       node.vm.provision "shell", inline: <<-SHELL
         apt-get update

@@ -11,7 +11,7 @@ systemctl daemon-reload
 ## start the master, change --apiserver-advertise-address=192.17.8.101 if necessary # change the with your the IP of with the IP your desired NIC
 ```console
 kubeadm config images pull #optional
-kubeadm init --apiserver-advertise-address=192.17.8.101 --pod-network-cidr=192.168.0.0/16 # change the with your the IP of with the IP your desired NIC
+kubeadm init --apiserver-advertise-address=192.168.104.101 --pod-network-cidr=192.168.0.0/16 # change the with your the IP of with the IP your desired NIC
 ```
 ## to make kubeadm master a scheduleable node 
 ```
