@@ -9,7 +9,8 @@ call plug#begin('~/.vim/plugged')
 	Plug 'terryma/vim-multiple-cursors'
         Plug 'markcornick/vim-vagrant'
         Plug 'gabrielelana/vim-markdown'
-
+        Plug 'andrewstuart/vim-kubernetes'
+	Plug 'ingydotnet/yaml-vim'
 " Initialize plugin system
 call plug#end()
 
