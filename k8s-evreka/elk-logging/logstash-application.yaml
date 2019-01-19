@@ -55,8 +55,8 @@ data:
     }
     output {
       elasticsearch {
-        #hosts => "elasticsearch-logging.elasticsearch:9200"
-        hosts => "elasticsearch-logging:9200"
+        #hosts => "elasticsearch-logging.elasticsearch.egys.svc.cluster.local:9200"
+        hosts => "elasticsearch-logging.kube-system.svc.cluster.local:9200"
         # index => "logstash-%{+YYYY.MM.dd}"
         # sniffing => false
       }
@@ -64,7 +64,6 @@ data:
   logstash.yml: |-
     http.host: "0.0.0.0"
     path.config: /usr/share/logstash/pipeline
-    xpack.monitoring.enabled: false
 
 ---
 apiVersion: extensions/v1beta1
