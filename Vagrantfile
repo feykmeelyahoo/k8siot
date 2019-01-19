@@ -19,14 +19,14 @@ config.vm.box = "bento/ubuntu-18.04"
       node.vm.hostname = vm_name
       node.vm.provider "virtualbox" do |v|
         if i == 1                       
-          v.memory = 3072
-          v.cpus = 1
+          v.memory = 4096
+          v.cpus = 2
         elsif i == 2                       
           v.memory = 10240
           v.cpus = 3
         else                            
-          v.memory = 8192
-          v.cpus = 2
+          v.memory = 9216
+          v.cpus = 3
         end                             
       end
       node.vm.provision "shell", inline: <<-SHELL
