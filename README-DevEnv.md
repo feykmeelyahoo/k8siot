@@ -82,4 +82,8 @@ helm reset
 rm -rf ~/.helm
 kubectl delete -f rbac-tiller.yaml   # bizde helm directory'sinde bulunuyor
 ```
-
+## Vagrant box oluşturma-- sonrasında hosts ve /etc/default/kubeleti editle
+```console
+vagrant package --base <<preconfigured_vm>> --output mybox.box
+vagrant box add --name="boxname" mybox.box
+```
