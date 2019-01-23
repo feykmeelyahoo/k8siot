@@ -18,9 +18,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: tb-service
+  name: egys-service
+  namespace: egys
   labels:
-    app: tb-service
+    app: egys-service
 spec:
   ports:
   - port: 8080
@@ -31,23 +32,25 @@ spec:
   - port: 5683
     name: coap
   selector:
-    app: tb
+    app: egys
   type: NodePort
 ---
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: tb-budget
+  name: egys-budget
+  namespace: egys
 spec:
   selector:
     matchLabels:
-      app: tb
+      app: egys
   minAvailable: 1
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: tb-config
+  name: egys-config
+  namespace: egys
 data:
   zookeeper.enabled: "true"
   zookeeper.url: "zk-headless"
@@ -68,17 +71,18 @@ data:
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: tb
+  name: egys
+  namespace: egys
 spec:
-  serviceName: "tb-service"
+  serviceName: "egys-service"
   replicas: 1
   template:
     metadata:
       labels:
-        app: tb
+        app: egys
     spec:
 #      nodeSelector:
-#        machinetype: tb
+#        machinetype: egys
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -87,12 +91,12 @@ spec:
                   - key: "app"
                     operator: In
                     values:
-                    - tb-service
+                    - egys-service
               topologyKey: "kubernetes.io/hostname"
       containers:
-      - name: tb
+      - name: egys
         imagePullPolicy: IfNotPresent
-        image: hvl/egys:2.1.0
+        image: 10.151.17.110/botas/egys:2.1.0
         ports:
         - containerPort: 8080
           name: ui
@@ -106,37 +110,37 @@ spec:
 #        - name: ZOOKEEPER_ENABLED
 #          valueFrom:
 #            configMapKeyRef:
-#              name: tb-config
+#              name: egys-config
 #              key: zookeeper.enabled
 #        - name: ZOOKEEPER_URL
 #          valueFrom:
 #            configMapKeyRef:
-#              name: tb-config
+#              name: egys-config
 #              key: zookeeper.url
         - name : CASSANDRA_HOST
           valueFrom:
             configMapKeyRef:
-              name: tb-config
+              name: egys-config
               key: cassandra.host
         - name : CASSANDRA_PORT
           valueFrom:
             configMapKeyRef:
-              name: tb-config
+              name: egys-config
               key: cassandra.port
         - name : CASSANDRA_URL
           valueFrom:
             configMapKeyRef:
-              name: tb-config
+              name: egys-config
               key: cassandra.url
         - name: DATABASE_TS_TYPE
           valueFrom:
             configMapKeyRef:
-              name: tb-config
+              name: egys-config
               key: database.ts.type
         - name: DATABASE_ENTITIES_TYPE
           valueFrom:
             configMapKeyRef:
-              name: tb-config
+              name: egys-config
               key: database.entities.type
         - name : RPC_HOST
           valueFrom:
@@ -145,37 +149,37 @@ spec:
 #        - name: CACHE_TYPE
 #          valueFrom:
 #            configMapKeyRef:
-#              name: tb-config
+#              name: egys-config
 #              key: cache.type
 #        - name: REDIS_HOST
 #          valueFrom:
 #            configMapKeyRef:
-#              name: tb-config
+#              name: egys-config
 #              key: redis.host
         - name: ADD_SCHEMA_AND_SYSTEM_DATA
           valueFrom:
             configMapKeyRef:
-              name: tb-config
+              name: egys-config
               key: add_schema_and_system_data
         - name: ADD_DEMO_DATA
           valueFrom:
             configMapKeyRef:
-              name: tb-config
+              name: egys-config
               key: add_demo_data
 #        - name: CASSANDRA_USE_CREDENTIALS
 #          valueFrom:
 #            configMapKeyRef:
-#              name: tb-config
+#              name: egys-config
 #              key: db-cred
 #        - name: CASSANDRA_USERNAME
 #          valueFrom:
 #            configMapKeyRef:
-#              name: tb-config
+#              name: egys-config
 #              key: db-user
 #        - name: CASSANDRA_PASSWORD
 #          valueFrom:
 #            configMapKeyRef:
-#              name: tb-config
+#              name: egys-config
 #              key: db-password
         command:
         - sh

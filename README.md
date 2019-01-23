@@ -97,6 +97,13 @@ rm -rf /var/lib/dockershim
 rm -rf /var/lib/kubelet
 rm -rf /etc/docker
 ```
+### kubectl proxy
+
+```
+kubectl proxy
+http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard:80/proxy/#!/overview?namespace=default
+http://127.0.0.1:8001/api/v1/namespaces/weave/services/weave-scope-app:80/proxy/
+```
 
 #### harbor secret creation ####
 ```
