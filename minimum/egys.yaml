@@ -56,6 +56,8 @@ data:
   zookeeper.url: "zk-headless"
   cassandra.url: "cassandra-headless:9042"
   cassandra.host: "cassandra-headless"
+  #cassandra.url: "10.151.16.159:9042"
+  #cassandra.host: "10.151.16.159"
   cassandra.port: "9042"
   database.ts.type: "cassandra"
   database.entities.type: "cassandra"
@@ -75,7 +77,7 @@ metadata:
   namespace: egys
 spec:
   serviceName: "egys-service"
-  replicas: 1
+  replicas: 10
   template:
     metadata:
       labels:
@@ -96,7 +98,7 @@ spec:
       containers:
       - name: egys
         imagePullPolicy: IfNotPresent
-        image: 10.151.17.110/botas/egys:2.1.0
+        image: 10.151.17.110/botas/egys:2.1.1
         ports:
         - containerPort: 8080
           name: ui
@@ -188,6 +190,16 @@ spec:
         livenessProbe:
           httpGet:
             path: /login
-            port: ui-port
+            port: ui
           initialDelaySeconds: 120
           timeoutSeconds: 10
+        readinessProbe:
+          httpGet: # make an HTTP request
+            port: ui # port to use
+            path: /login # endpoint to hit
+            scheme: HTTP # or HTTPS
+          initialDelaySeconds: 3 # how long to wait before checking
+          periodSeconds: 3 # how long to wait between checks
+          successThreshold: 1 # how many successes to hit before accepting
+          failureThreshold: 1 # how many failures to accept before failing
+          timeoutSeconds: 1
