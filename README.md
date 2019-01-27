@@ -12,6 +12,7 @@ systemctl daemon-reload
 ```console
 kubeadm config images pull #optional
 kubeadm init --apiserver-advertise-address=192.168.104.101 --pod-network-cidr=192.168.0.0/16 # change the with your the IP of with the IP your desired NIC
+sudo kubeadm init --apiserver-advertise-address 192.168.104.41 --service-dns-domain cluster.havelsan --pod-network-cidr 192.168.0.0/16
 ```
 ## to make kubeadm master a scheduleable node 
 ```
@@ -168,3 +169,16 @@ The port is 8080 which represents that test-service can be accessed by other ser
 > Question - Reading some of the comments in the client code, they mention that targetPort is optional. So how does kubernetes decide what port of the pod to expose? Does it default to a particular value?
 > 
 > Answer - "By default the targetPort will be set to the same value as the port field." (kubernetes.io/docs/concepts/services-networking/service/…). So by default, Kubernetes assumes the port that's exposed inside the cluster, is the same as the port exposed directly by the pod.
+>
+
+### DNS resolution için  (Ubuntu 18.04)
+> 1- Kubernetes nodelarından bir tanesine geç
+> 2- vi /etc/systemd/resolved.conf
+>    DNS=10.96.0.10
+>    Domains=cluster.havelsan default.svc.cluster.havelsan kube-system.svc.cluster.havelsan egys.svc.cluster.havelsan
+> 3-  /etc/resolv.conf -> /run/systemd/resolve/resolv.conf a linkle
+> 4- reboot
+
+### Clustername Değişince weave scpoe açılmadı
+> Adamlar yaml içine hardcoded cluster.local yazmışlar 
+> Yeni isimle değiştirince çalıştı
