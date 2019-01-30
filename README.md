@@ -144,6 +144,16 @@ spec:
   imagePullSecrets:
   - name: harbor
 ```
+
+### Troubleshooting Tip
+namespaceleri silemiyor idim özellikle kubevirt. Apiserver ve controller managerda bir dolu log dönüyor idi.
+kubectl get apiservices --all-namespaces| grep virt  
+kubectl delete apiservices v1alpha2.subresources.kubevirt.io
+
+yapınca dzeldi.
+
+Anlaşılan atılan apilar kalmıştı ve bunlar ns silinmesine engel oluyor idi.
+
 > ### Difference Between port, targetPort and nodePort
 https://stackoverflow.com/questions/49981601/difference-between-targetport-and-port-in-kubernetes-service-definition
 ```

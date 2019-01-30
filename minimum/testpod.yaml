@@ -1,0 +1,11 @@
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: serkans-test-pod
+spec:
+  containers:
+    - name: serkans-test-pod
+      image: ubuntu
+      command: ["/bin/bash", "-ec", "while :; do echo '.'; sleep 50 ; done"]
+  restartPolicy: Never
