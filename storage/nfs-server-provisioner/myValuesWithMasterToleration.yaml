@@ -77,9 +77,13 @@ resources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
-# nodeSelector: 
-#   kubernetes.io/hostname: 'k8s-01'
+nodeSelector: 
+  kubernetes.io/hostname: 'hvlkube-01'
 
-tolerations: []
+tolerations: 
+  - key: "node-role.kubernetes.io/master"
+#    operator: "Equal"
+#    value: "true"
+    effect: "NoSchedule"
 
 affinity: {}

@@ -2,13 +2,11 @@
 # check if a go version is set
 
 clear
-echo #################
-echo #################
-echo #################
+echo "#################"
 echo $0 $1
-echo #################
-echo #################
-echo #################
+echo "#################"
+
+nodeIp=$1
 
 apt-get update
 apt-get upgrade -y
@@ -23,9 +21,6 @@ else
     echo "Installing Cert"
     sudo cp /vagrant/vagrantscripts/PCAcer.crt /usr/local/share/ca-certificates
     sudo update-ca-certificates 
-
-    HOSTNAME=$(hostname)
-    sudo sed -i '/'${HOSTNAME}'/d' /etc/hosts
 fi
 
 docker ps > /dev/null 2>&1
@@ -60,8 +55,7 @@ EOF'
     apt-mark hold kubelet kubeadm kubectl
 
     kubeletPlace=$(find /etc -name kubelet -exec bash -c  "echo {}" \;)      
-    myIP=$1
-    sed  -i $'/KUBELET_EXTRA_ARGS/c KUBELET_EXTRA_ARGS=  --node-ip='${myIP}'' $kubeletPlace
+    sed  -i $'/KUBELET_EXTRA_ARGS/c KUBELET_EXTRA_ARGS= --node-ip='${nodeIp}'' $kubeletPlace
 
     # echo "Europe/Istanbul" | sudo tee /etc/timezone
     ln -fs /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
@@ -69,7 +63,6 @@ EOF'
 
     swapoff -a
     sed -i '/ swap / s/^/#/' /etc/fstab    
-    cat /etc/hosts /vagrant/vagrantscripts/appendhosts | sudo tee /etc/hosts   
 
     echo ">>> INSTALLING kubens kubectx installation"
     git clone https://github.com/ahmetb/kubectx /opt/kubectx
@@ -82,7 +75,7 @@ EOF'
     mv linux-amd64/helm /usr/local/bin/helm
     rm -rf linux-amd64 helm-v2.12.1-linux-amd64.tar.gz
     
-    echo ">>> Appended hosts, now, time to do vagrant reload !!!"
+    echo ">>> Time to do vagrant reload !!!"
     # sudo shutdown now -r
 fi
 
