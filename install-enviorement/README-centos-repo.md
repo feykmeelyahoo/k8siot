@@ -1,8 +1,8 @@
-#Local Centos repo kurulumları ve ayarlanması
+# Local Centos repo kurulumları ve ayarlanması
 
 >Bu kurulumda repo domain bilgisi "repo.domain" olarak ayarlanmıştır. Domain bilgisine göre gerekli yerleri değiştirilmesi gerekmektedir.
 
-##Repo serverın kurulum adımları
+## Repo serverın kurulum adımları
 İlk olarak gerekli repo ve araçların kurulumlarının yapılması gerekmektedir. 
 ```
 yum install http://resources.ovirt.org/pub/yum-repo/ovirt-release42.rpm
@@ -68,7 +68,7 @@ EOF
 service nginx restart
 ```
 
-##Client sunucuların repo ayarlamalarının yapılması
+## Client sunucuların repo ayarlamalarının yapılması
 İlk olarak internet repoları OLDREPOS dizinine taşınır.
 ```
 mkdir -p /etc/yum.repos.d/OLDREPOS
