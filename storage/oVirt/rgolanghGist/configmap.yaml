@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  connection: |
+    url=https://ovirt-engine-fqdn/ovirt-engine/api
+    username=admin@internal
+    password=123
+    insecure=True
+    cafile=
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: ovirt
+  selfLink: /api/v1/namespaces/default/configmaps/ovirt

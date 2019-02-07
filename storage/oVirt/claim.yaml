@@ -1,0 +1,14 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mediawiki-data-ssd-disk
+  annotations:
+    volume.beta.kubernetes.io/storage-class: datastore2
+spec:
+  storageClassName: datastore2
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
