@@ -89,5 +89,11 @@ service named restart
 
 Client sunucularda dns server değiştirilip kullanılabilir.
 
+Hosted-engine üzerinde açılan sunucuların dns kayıtlarını ekleyen bir script hazırladık. Şuanki ortamda server4 üzerinde çalışmaktadır. Kısaca engine api üzerinden vm isimlerini ve ip adreslerini alıp dns kaydı yoksa veya farklıysa dns kaydı ekliyor.
 
+```
+[root@Server4 ~]# crontab -l|grep Dns
+*/30 * * * * /bin/bash /usr/local/bin/DnsUpdaterFromEngine.sh
+[root@Server4 ~]# 
+```
 
