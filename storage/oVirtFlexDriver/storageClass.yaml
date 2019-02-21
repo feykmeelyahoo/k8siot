@@ -2,7 +2,8 @@ kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
   name: datastore2
-provisioner: external/ovirt 
+  # provisioner: external/ovirt 
+provisioner: ovirt-volume-provisioner
 parameters:
   type: io1
   iopsPerGB: "10"

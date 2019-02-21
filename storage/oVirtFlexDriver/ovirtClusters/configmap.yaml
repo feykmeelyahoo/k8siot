@@ -1,9 +1,9 @@
 apiVersion: v1
 data:
   connection: |
-    url=https://ovirt-engine-fqdn/ovirt-engine/api
+    url=https://engine.domain/ovirt-engine/api
     username=admin@internal
-    password=123
+    password=1234
     insecure=True
     cafile=
 kind: ConfigMap

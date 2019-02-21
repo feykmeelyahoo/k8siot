@@ -24,7 +24,7 @@ spec:
               apiVersion: v1
               fieldPath: spec.nodeName
         image: quay.io/rgolangh/ovirt-flexvolume-driver
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: ovirt-flexvolume-driver
         resources:
           limits:

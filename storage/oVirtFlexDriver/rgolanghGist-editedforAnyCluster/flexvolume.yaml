@@ -1,0 +1,83 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  creationTimestamp: null
+  generation: 1
+  name: ovirt-flexvolume-driver
+  selfLink: /apis/extensions/v1beta1/namespaces/default/daemonsets/ovirt-flexvolume-driver
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: ovirt-flexvolume-driver
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: ovirt-flexvolume-driver
+    spec:
+      hostAliases:
+      - ip: "10.151.102.200"
+        hostnames:
+        - "engine.domain"
+      containers:
+      - env:
+        - name: OVIRT_VM_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        image: quay.io/rgolangh/ovirt-flexvolume-driver
+        imagePullPolicy: IfNotPresent
+        name: ovirt-flexvolume-driver
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        securityContext:
+          privileged: true
+          procMount: Default
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+          name: plugindir
+        - mountPath: /opt/ovirt-flexvolume-driver
+          name: config-volume
+      dnsConfig:
+        nameservers:
+          #- 8.8.8.8 
+          #- 8.8.4.4
+          - 10.151.102.30
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+      volumes:
+      - hostPath:
+          path: /usr/libexec/kubernetes/kubelet-plugins/volume/exec/
+          type: ""
+        name: plugindir
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: connection
+            path: ovirt-flexvolume-driver.conf
+          name: ovirt
+        name: config-volume
+  templateGeneration: 1
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+status:
+  currentNumberScheduled: 0
+  desiredNumberScheduled: 0
+  numberMisscheduled: 0
+  numberReady: 0

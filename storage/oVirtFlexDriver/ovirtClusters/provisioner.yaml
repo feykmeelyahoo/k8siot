@@ -32,7 +32,7 @@ spec:
         - name: OVIRT_API_CONF
           value: /etc/ovirt/ovirt-api.conf
         image: quay.io/rgolangh/ovirt-volume-provisioner
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: ovirt-volume-provisioner
         resources: {}
         terminationMessagePath: /dev/termination-log
