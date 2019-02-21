@@ -1,0 +1,57 @@
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geo-service
+  namespace: egys
+  labels:
+    app: geo-service
+spec:
+  ports:
+  - port: 8090
+    name: ui
+    nodePort: 31090
+  selector:
+    app: geo
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: geo
+  namespace: egys
+spec:
+  serviceName: "geo-service"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: geo
+    spec:
+#      nodeSelector:
+#        machinetype: egys
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - geo-service
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: geoserver
+        imagePullPolicy: IfNotPresent
+        image: thingsboard/geoserver:2.11.2
+        ports:
+        - containerPort: 8090
+          name: ui
+#              name: egys-config
+#              key: zookeeper.enabled
+#        - name: ZOOKEEPER_URL
+#          valueFrom:
+#            configMapKeyRef:
+#              name: egys-config
+#              key: zookeeper.url  

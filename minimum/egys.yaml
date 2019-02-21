@@ -66,6 +66,7 @@ data:
   ui-port: "8080"
   add_schema_and_system_data: "false"
   add_demo_data: "false"
+  update_system_widgets: "false"
 #  db-user: "admin"
 #  db-password: "admin"
 #  db-cred: "true"
@@ -158,6 +159,11 @@ spec:
 #            configMapKeyRef:
 #              name: egys-config
 #              key: redis.host
+        - name: UPDATE_SYSTEM_WIDGETS
+          valueFrom:
+             configMapKeyRef:
+               name: egys-config
+               key: update_system_widgets
         - name: ADD_SCHEMA_AND_SYSTEM_DATA
           valueFrom:
             configMapKeyRef:
