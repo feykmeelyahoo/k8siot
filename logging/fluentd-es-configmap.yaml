@@ -376,6 +376,26 @@ data:
       read_from_head true
       tag kernel
     </source>
+    
+    <source>
+     @id system-log
+     @type tail
+     format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$/
+     time_format %b %d %H:%M:%S
+     path /var/log/syslog
+     pos_file /var/log/syslog.pos
+     tag system
+	</source>
+
+	<source>
+      @id system-auth-log
+      @type tail
+      format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$/
+      time_format %b %d %H:%M:%S
+      path /var/log/auth.log
+      pos_file /var/log/auth.log.pos
+      tag system.auth
+	</source>
 
   forward.input.conf: |-
     # Takes the messages sent over TCP
