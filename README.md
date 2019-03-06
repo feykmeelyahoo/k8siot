@@ -192,3 +192,8 @@ The port is 8080 which represents that test-service can be accessed by other ser
 ### Clustername Değişince weave scpoe açılmadı
 > Adamlar yaml içine hardcoded cluster.local yazmışlar 
 > Yeni isimle değiştirince çalıştı
+
+### when delete pv stucks
+
+> kubectl patch pv pvc-9f02c323-3ffd-11e9-bacc-566f555f0001 -p '{"metadata":{"finalizers":null}}'
+

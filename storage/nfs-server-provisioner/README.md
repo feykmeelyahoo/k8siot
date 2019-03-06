@@ -17,3 +17,4 @@ helm install --name nfsserver --values ./myValues.yaml stable/nfs-server-provisi
 kubectl create -f pv.yaml
 kubectl get pv,pvc,pods 
 ```
+Önemli Not:   Ubuntu'da nfs-common, CentOS'da nfs-utils kurulmalı
