@@ -1,5 +1,8 @@
 # Create Root CA (Done once)
 
+## Easy 
+**Just run make**
+
 ## Create Root Key
 
 **Attention:** this is the key used to sign the certificate requests, anyone holding this can sign certificates on your behalf. So keep it in a safe place!
@@ -86,5 +89,18 @@ openssl x509 -req -in mydomain.com.csr -CA rootCA.crt -CAkey rootCA.key -CAcreat
 openssl x509 -in mydomain.com.crt -text -noout
 ```
 https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309
-https://www.vultr.com/docs/how-to-install-harbor-on-centos-7
-https://blog.inkubate.io/how-to-use-harbor-private-registry-with-kubernetes/
+
+
+## Root Cert install on Centos and restart docker daemon to take effect
+```
+yum install ca-certificates -y
+update-ca-trust force-enable
+cp rootCA.crt /etc/pki/ca-trust/source/anchors/
+update-ca-trust extract
+```
+
+## Root Cert install on Ubuntu and restart docker daemon to take effect
+```
+sudo cp rootCA.crt /usr/local/share/ca-certificates
+sudo update-ca-certificates          
+```
