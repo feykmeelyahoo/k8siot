@@ -1,4 +1,4 @@
-.srl
+*.srl
 *.swp
 *.stackdump
 # OS-specific
