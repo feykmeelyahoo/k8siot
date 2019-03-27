@@ -1,9 +1,9 @@
 
-DOMAIN ?= havelsan.local
+DOMAIN ?= havelsan.io
 
 COUNTRY :=TR
 STATE := Ankara
-COMPANY := HAVELSAN Local
+COMPANY := HAVELSAN LocalDev
 
 # credits to: https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309
 
