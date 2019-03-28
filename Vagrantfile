@@ -1,8 +1,8 @@
 VAGRANTFILE_API_VERSION = "2"
 
 $k8s_count=3
-$k8s_memory=4096
-$k8s_cpus=2
+$k8s_memory=8192
+$k8s_cpus=4
 $startingIp=50
 
 def hostPrefix()
@@ -20,7 +20,8 @@ end
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.insert_key = false
 
-  config.vm.box = "bento/ubuntu-18.04"
+#  config.vm.box = "bento/ubuntu-18.04"
+  config.vm.box = "basdemirs/ub1804-k8s-14.0"
   (1..$k8s_count).each do |i|
     config.vm.define vm_name = "#{hostPrefix()}%d" % i do |node|
       node.vm.network :private_network, :ip => "#{workerIP(i)}"
@@ -28,10 +29,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provider "virtualbox" do |v|
         if i == 1                       
           v.memory = 4096
-          v.cpus = $k8s_cpus
+          v.cpus = 2
         elsif i == 2                       
-          v.memory = 4096
-          v.cpus = $k8s_cpus
+          v.memory = 8192
+          v.cpus = 3
         else                            
           v.memory = $k8s_memory
           v.cpus = $k8s_cpus
@@ -39,19 +40,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
       node.vm.provision "shell", inline: <<-SHELL
       apt-get update
-      apt-get install -y nfs-common zsh nano vim git mlocate ldap-utils gnutls-bin ssl-cert tmux
-
-      systemctl stop ufw
-      systemctl disable ufw
+      apt install kubeadm kubectl kubelet kubernetes-cni -y
+      apt-get upgrade -y
       SHELL
-      node.vm.provision :shell, :path => "vagrantscripts/grubupdate.sh"
-      node.vm.provision :shell, :path => "vagrantscripts/bootstrap.sh", :args => "#{workerIP(i)}"
-      node.vm.provision :shell, :path => "vagrantscripts/setLocale.sh"
-      # Change the vagrant user's shell to use zsh
-      node.vm.provision :shell, inline: "chsh -s /usr/bin/zsh vagrant"
-      node.vm.provision :shell, :path => "vagrantscripts/shellVimExtras.sh"
-      node.vm.provision :shell, :path => "vagrantscripts/shellVimExtras.sh", privileged: false
-      # You can disable above scripts if you use custom VM image which include necessary installations.
       node.vm.provision :shell, :path => "vagrantscripts/minimal.sh", :args => ["#{workerIP(i)}", "#$startingIp", "#$k8s_count", "#{ipPrefix()}", "#{hostPrefix()}"]
     end
   end

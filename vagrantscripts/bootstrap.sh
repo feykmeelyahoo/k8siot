@@ -46,6 +46,7 @@ else
 
     # Restart docker.
     systemctl daemon-reload
+    systemctl enable docker
     systemctl restart docker
 fi
 

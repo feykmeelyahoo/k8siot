@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
+replicaCount: 2
 strategyType: Recreate
 
 image:
@@ -43,11 +43,6 @@ storageClass:
 rbac:
   # Specifies whether RBAC resources should be created
   create: true
-
-# If true, create & use Pod Security Policy resources
-# https://kubernetes.io/docs/concepts/policy/pod-security-policy/
-podSecurityPolicy:
-  enabled: false
 
 serviceAccount:
   # Specifies whether a ServiceAccount should be created
