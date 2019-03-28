@@ -80,7 +80,7 @@ EOF'
     ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 
     echo ">>> INSTALLING Helm !!!"
-    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.12.1-linux-amd64.tar.gz
+    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz
     tar -zxf helm-v2.12.1-linux-amd64.tar.gz
     mv linux-amd64/helm /usr/local/bin/helm
     rm -rf linux-amd64 helm-v2.12.1-linux-amd64.tar.gz
