@@ -39,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
       node.vm.provision "shell", inline: <<-SHELL
       apt-get update
-      apt-get install -y zsh nano vim git mlocate ldap-utils gnutls-bin ssl-cert tmux
+      apt-get install -y nfs-common zsh nano vim git mlocate ldap-utils gnutls-bin ssl-cert tmux
 
       systemctl stop ufw
       systemctl disable ufw

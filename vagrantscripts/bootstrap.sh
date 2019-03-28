@@ -30,8 +30,23 @@ else
     sudo apt-get install -y docker.io
     echo ">>> Adding vagrant user to docker group"
     sudo usermod -aG docker vagrant
-    sudo systemctl start docker
-    sudo systemctl enable docker
+    # Setup daemon.
+    bash -c 'cat > /etc/docker/daemon.json <<EOF
+    {
+    "exec-opts": ["native.cgroupdriver=systemd"],
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-size": "100m"
+    },
+    "storage-driver": "overlay2"
+    }
+    EOF'
+
+    mkdir -p /etc/systemd/system/docker.service.d
+
+    # Restart docker.
+    systemctl daemon-reload
+    systemctl restart docker
 fi
 
 kubeadm > /dev/null 2>&1
