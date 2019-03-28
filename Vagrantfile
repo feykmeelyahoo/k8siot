@@ -10,7 +10,7 @@ def hostPrefix()
 end
 
 def ipPrefix()
-  return "172.17.8.."
+  return "172.17.8."
 end
 
 def workerIP(num)
