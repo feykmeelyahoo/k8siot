@@ -1,5 +1,6 @@
 *.lck
 *.lock
+*.srl
 *.swp
 *.stackdump
 # OS-specific

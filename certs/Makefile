@@ -1,9 +1,9 @@
 
-DOMAIN ?= havelsan.local
+DOMAIN ?= havelsan.io
 
 COUNTRY :=TR
 STATE := Ankara
-COMPANY := HAVELSAN Local
+COMPANY := HAVELSAN LocalDev
 
 # credits to: https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309
 
@@ -18,13 +18,6 @@ COMPANY := HAVELSAN Local
 
 all: $(DOMAIN).csr $(DOMAIN).crt
 
-
-rootCA.key:
-	openssl genrsa -out rootCA.key 4096
-
-# create and self sign root certificate
-rootCA.crt: rootCA.key
-	echo -ne "$(COUNTRY)\n$(STATE)\n\n$(COMPANY)\n\n\n\n" | openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 36500 -out $@
 
 $(DOMAIN).key:
 	openssl genrsa -out $@ 2048
@@ -46,7 +39,7 @@ verify-csr:
 $(DOMAIN).san.conf:
 	sh mksan.sh $(DOMAIN) $(COUNTRY) $(STATE) "$(COMPANY)" >$@
 
-$(DOMAIN).crt: rootCA.key rootCA.crt $(DOMAIN).csr $(DOMAIN).san.conf
+$(DOMAIN).crt: $(DOMAIN).csr $(DOMAIN).san.conf
 	openssl x509 -req -in $(DOMAIN).csr -CA ./rootCA.crt -CAkey ./rootCA.key \
 		-CAcreateserial -out $@ -days 7300 -sha256 \
 		-extfile $(DOMAIN).san.conf -extensions req_ext

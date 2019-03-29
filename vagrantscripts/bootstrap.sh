@@ -8,10 +8,6 @@ echo "#################"
 
 nodeIp=$1
 
-apt-get update
-apt-get upgrade -y
-apt-get install -y zsh vim git mlocate ldap-utils gnutls-bin ssl-cert tmux
-
 ls /usr/local/share/ca-certificates/PCAcer.crt > /dev/null 2>&1
 CERT_INSTALLED=$?
 
@@ -30,11 +26,28 @@ if [ $DOCKER_INSTALLED -eq 0 ]; then
     echo "Docker Already Installed"
 else
     echo ">>> Installing docker"
+    apt-get update
     sudo apt-get install -y docker.io
     echo ">>> Adding vagrant user to docker group"
     sudo usermod -aG docker vagrant
-    sudo systemctl start docker
-    sudo systemctl enable docker
+    # Setup daemon.
+    bash -c 'cat > /etc/docker/daemon.json <<EOF
+    {
+    "exec-opts": ["native.cgroupdriver=systemd"],
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-size": "100m"
+    },
+    "storage-driver": "overlay2"
+    }
+    EOF'
+
+    mkdir -p /etc/systemd/system/docker.service.d
+
+    # Restart docker.
+    systemctl daemon-reload
+    systemctl enable docker
+    systemctl restart docker
 fi
 
 kubeadm > /dev/null 2>&1
@@ -54,9 +67,6 @@ EOF'
     apt-get install -y kubelet kubeadm kubectl
     apt-mark hold kubelet kubeadm kubectl
 
-    kubeletPlace=$(find /etc -name kubelet -exec bash -c  "echo {}" \;)      
-    sed  -i $'/KUBELET_EXTRA_ARGS/c KUBELET_EXTRA_ARGS= --node-ip='${nodeIp}'' $kubeletPlace
-
     # echo "Europe/Istanbul" | sudo tee /etc/timezone
     ln -fs /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
     dpkg-reconfigure --frontend noninteractive tzdata
@@ -70,7 +80,7 @@ EOF'
     ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 
     echo ">>> INSTALLING Helm !!!"
-    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.12.1-linux-amd64.tar.gz
+    wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz
     tar -zxf helm-v2.12.1-linux-amd64.tar.gz
     mv linux-amd64/helm /usr/local/bin/helm
     rm -rf linux-amd64 helm-v2.12.1-linux-amd64.tar.gz

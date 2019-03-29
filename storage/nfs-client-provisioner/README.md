@@ -8,6 +8,8 @@ The [NFS client provisioner](https://github.com/kubernetes-incubator/external-st
 $ helm install --set nfs.server=x.x.x.x --set nfs.path=/exported/path stable/nfs-client-provisioner
 ```
 
+For **arm** deployments set `image.repository` to `--set image.repository=quay.io/external_storage/nfs-client-provisioner-arm`
+
 ## Introduction
 
 This charts installs custom [storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/) into a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager. It also installs a [NFS client provisioner](https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client) into the cluster which dynamically creates persistent volumes from single NFS share.
@@ -68,3 +70,23 @@ The following tables lists the configurable parameters of this chart and their d
 | `affinity`                        | Affinity settings                           | `{}`                                                      |
 | `tolerations`                     | List of node taints to tolerate             | `[]`                                                      |
 
+
+
+sudo apt install nfs-kernel-server
+sudo mkdir -p /mnt/kubenfs
+sudo chown nobody:nogroup /mnt/kubenfs
+sudo chmod 777 /mnt/sharedfolder
+sudo chmod 777 /mnt/kubenfs
+sudo nano /etc/exports
+sudo vi /etc/exports
+sudo exportfs -a
+sudo exportfs -v
+sudo systemctl status nfs-kernel-server.service
+sudo systemctl enable nfs-kernel-server.service
+
+add 
+/mnt/kubenfs 172.17.8.0/24(rw,sync,no_root_squash,no_subtree_check)
+to /etc/exports
+
+
+helm install --set nfs.server=172.17.8.51 --set nfs.path=/mnt/kubenfs stable/nfs-client-provisioner --values values.yaml -n nfs-client --namespace storage
