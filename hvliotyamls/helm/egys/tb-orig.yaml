@@ -53,10 +53,10 @@ metadata:
   name: egys-config
   namespace: egys
 data:
-  zookeeper.enabled: "true"
+  zookeeper.enabled: "false"
   zookeeper.url: "zk-headless"
-  cassandra.url: "cassandra-headless:9042"
-  cassandra.host: "cassandra-headless"
+  cassandra.url: "bitcass-cassandra-headless:9042"
+  cassandra.host: "bitcass-cassandra-headless"
   #cassandra.url: "10.151.16.159:9042"
   #cassandra.host: "10.151.16.159"
   cassandra.port: "9042"
@@ -65,9 +65,9 @@ data:
   cache.type: "redis"
   redis.host: "redis-service"
   ui-port: "8080"
-  add_schema_and_system_data: "true"
-  add_demo_data: "true"
-  update_system_widgets: "true"
+  add_schema_and_system_data: "false"
+  add_demo_data: "false"
+  update_system_widgets: "false"
   db-user: "cassandra"
   db-password: "cassandra"
   db-cred: "true"
@@ -142,6 +142,13 @@ spec:
             configMapKeyRef:
               name: egys-config
               key: database.ts.type
+###### SADECE TB DENEMESI ICIN  CIKAR SERKAN
+        - name: DATABASE_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: egys-config
+              key: database.entities.type
+###### SADECE TB DENEMESI ICIN  CIKAR SERKAN
         - name: DATABASE_ENTITIES_TYPE
           valueFrom:
             configMapKeyRef:
