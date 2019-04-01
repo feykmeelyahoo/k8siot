@@ -2,6 +2,7 @@ kubectl create configmap init-db --from-file=path/to/scripts
 helm install bitnami/cassandra --set initDBConfigMap=init-db
 helm install bitnami/cassandra -n bitcass --set dbUser.password=cassandra --set cluster.replicaCount=3 --set cluster.seedCount=2
 helm install bitnami/cassandra -n bitcass --set initDBConfigMap=init-db --set dbUser.password=cassandra --set cluster.replicaCount=3 --set cluster.seedCount=2
+helm install bitnami/cassandra -n bitcass --set initDBConfigMap=init-db --set dbUser.password=cassandra --set image.pullPolicy=IfNotPresent
 
 NOTES:
 ** Please be patient while the chart is being deployed **
@@ -49,3 +50,7 @@ readinessProbe:
   successThreshold: 1 # how many successes to hit before accepting
   failureThreshold: 1 # how many failures to accept before failing
   timeoutSeconds: 1
+
+
+kubectl run --namespace egys bitcass-cassandra-client --env CASSANDRA_PASSWORD=$CASSANDRA_PASSWORD --image docker.io/bitnami/cassandra:3.11.4
+

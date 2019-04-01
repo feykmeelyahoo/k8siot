@@ -26,6 +26,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define vm_name = "#{hostPrefix()}%d" % i do |node|
       node.vm.network :private_network, :ip => "#{workerIP(i)}"
       node.vm.hostname = vm_name
+      if i == 2
+        node.vm.network "forwarded_port", guest: 31080, host: 31080, protocol: "tcp",
+          auto_correct: true
+        node.vm.network "forwarded_port", guest: 31215, host: 31215, protocol: "tcp",
+          auto_correct: true
+      end
       node.vm.provider "virtualbox" do |v|
         if i == 1                       
           v.memory = 4096

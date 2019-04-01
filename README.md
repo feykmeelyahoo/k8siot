@@ -197,3 +197,10 @@ The port is 8080 which represents that test-service can be accessed by other ser
 
 > kubectl patch pv pvc-9f02c323-3ffd-11e9-bacc-566f555f0001 -p '{"metadata":{"finalizers":null}}'
 
+
+### Pod Eviction Timeout values for kube controller manager
+```
+--node-monitor-period=2s (default 5s)
+--node-monitor-grace-period=16s (default 40s)
+--pod-eviction-timeout=30s (default 5m)
+```
