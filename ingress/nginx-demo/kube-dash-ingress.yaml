@@ -7,8 +7,13 @@ metadata:
   name: kubernetes-dashboard
   namespace: kube-system
 spec:
+  tls:
+    - hosts:
+      - kubernetes-dashboard.havelsan.io
+      secretName: havelsan.io
+
   rules:
-  - host: kubernetes-dashboard.hvl.com
+  - host: kubernetes-dashboard.havelsan.io
     http:
       paths:
       - backend:
