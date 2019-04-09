@@ -4,11 +4,11 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /
-  name: kubernetes-dashboard
+  name: kubedash
   namespace: kube-system
 spec:
   rules:
-  - host: kubernetes-dashboard.hvl.com
+  - host: kubedash.k8s.dc1.havelsan.io
     http:
       paths:
       - backend:
