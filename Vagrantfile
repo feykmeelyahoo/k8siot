@@ -1,6 +1,6 @@
 VAGRANTFILE_API_VERSION = "2"
 
-$k8s_count=3
+$k8s_count=1
 $k8s_memory=8192
 $k8s_cpus=4
 $startingIp=50
@@ -27,6 +27,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.network :private_network, :ip => "#{workerIP(i)}"
       node.vm.hostname = vm_name
       if i == 2
+        node.vm.network "forwarded_port", guest: 31883, host: 31883, protocol: "tcp",
+          auto_correct: true
+        node.vm.network "forwarded_port", guest: 31000, host: 31000, protocol: "tcp",
+          auto_correct: true
         node.vm.network "forwarded_port", guest: 31080, host: 31080, protocol: "tcp",
           auto_correct: true
         node.vm.network "forwarded_port", guest: 31215, host: 31215, protocol: "tcp",
@@ -44,9 +48,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           v.cpus = $k8s_cpus
         end                             
       end
+      node.vm.provision :shell, :path => "vagrantscripts/grubupdate.sh"
       node.vm.provision "shell", inline: <<-SHELL
       apt-get update
-      apt install kubeadm kubectl kubelet kubernetes-cni -y
+      apt-get install kubeadm kubectl kubelet kubernetes-cni --allow-change-held-packages -y
       apt-get upgrade -y
       SHELL
       node.vm.provision :shell, :path => "vagrantscripts/minimal.sh", :args => ["#{workerIP(i)}", "#$startingIp", "#$k8s_count", "#{ipPrefix()}", "#{hostPrefix()}"]

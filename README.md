@@ -204,3 +204,10 @@ The port is 8080 which represents that test-service can be accessed by other ser
 --node-monitor-grace-period=16s (default 40s)
 --pod-eviction-timeout=30s (default 5m)
 ```
+### Centos icin
+sudo modprobe br_netfilter
+sudo sysctl net.bridge.bridge-nf-call-iptables=1
+
+# nmap yerine netcat denenebilir
+nc -vz hostname port
+nc -vz 10.151.102.51 31080

@@ -14,9 +14,9 @@ argCount=$#
 hostsFile="/etc/hosts"
 hostName=$(hostname)
 
-kubeletPlace=$(find /etc -name kubelet -exec bash -c  "echo {}" \;)
-myIP=$1
-echo "KUBELET_EXTRA_ARGS= --node-ip='${myIP}'" > ${kubeletPlace}
+#kubeletPlace=$(find /etc -name kubelet -exec bash -c  "echo {}" \;)
+#myIP=$1
+#echo "KUBELET_EXTRA_ARGS= --node-ip='${myIP}'" > ${kubeletPlace}
 systemctl daemon-reload
 
 
