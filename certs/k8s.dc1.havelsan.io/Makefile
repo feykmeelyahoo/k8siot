@@ -23,7 +23,7 @@ rootCA.key:
 
 # create and self sign root certificate
 rootCA.crt: rootCA.key
-	echo -ne "$(COUNTRY)\n$(STATE)\n\n$(COMPANY)\n\n\n\n" | openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out $@
+	echo -ne "$(COUNTRY)\n$(STATE)\n\n$(COMPANY)\n\n\n\n" | openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 10024 -out $@
 
 $(DOMAIN).key:
 	openssl genrsa -out $@ 2048

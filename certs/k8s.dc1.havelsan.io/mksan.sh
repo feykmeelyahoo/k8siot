@@ -16,5 +16,5 @@ commonName                 = $1
 subjectAltName = @alt_names
 [alt_names]
 DNS.1   = $1
-DNS.2   = www.$1
+DNS.2   = *.$1
 EOF
