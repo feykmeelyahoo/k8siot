@@ -142,7 +142,7 @@ alertmanager:
     ## Hosts must be provided if Ingress is enabled.
     ##
     hosts:
-      - alertmanager.havelsan.io
+      - alertmanager.k8s.dc1.havelsan.io
 
     ## Paths to use for ingress rules - one path should match the alertmanagerSpec.routePrefix
     ##
@@ -153,9 +153,9 @@ alertmanager:
     ## Secret must be manually created in the namespace
     ##
     tls: 
-      - secretName: havelsan.io
+      - secretName: k8s.dc1.havelsan.io
         hosts:
-        - alertmanager.havelsan.io
+        - alertmanager.k8s.dc1.havelsan.io
 
   ## Configuration for Alertmanager service
   ##
@@ -340,7 +340,7 @@ grafana:
     ## Must be provided if Ingress is enable.
     ##
     hosts:
-      - grafana.havelsan.io
+      - grafana.k8s.dc1.havelsan.io
     #   - grafana.domain.com
     # hosts: []
 
@@ -351,9 +351,9 @@ grafana:
     ## Secret must be manually created in the namespace
     ##
     tls:
-      - secretName: havelsan.io
+      - secretName: k8s.dc1.havelsan.io
         hosts:
-        - grafana.havelsan.io
+        - grafana.k8s.dc1.havelsan.io
 
     # - secretName: grafana-general-tls
     #   hosts:
@@ -873,7 +873,7 @@ prometheus:
     ## Must be provided if Ingress is enabled.
     ##
     hosts:
-      - prometheus.havelsan.io
+      - prometheus.k8s.dc1.havelsan.io
     # hosts: []
 
     ## Paths to use for ingress rules - one path should match the prometheusSpec.routePrefix
@@ -886,9 +886,9 @@ prometheus:
     ## Secret must be manually created in the namespace
     ##
     tls:
-      - secretName: havelsan.io
+      - secretName: k8s.dc1.havelsan.io
         hosts:
-        - prometheus.havelsan.io
+        - prometheus.k8s.dc1.havelsan.io
 
   serviceMonitor:
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.

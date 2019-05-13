@@ -10,8 +10,7 @@ spec:
   tls:
     - hosts:
       - kubedash.k8s.dc1.havelsan.io
-      secretName: havelsan.io
-
+      secretName: k8s.dc1.havelsan.io
   rules:
   - host: kubedash.k8s.dc1.havelsan.io
     http:
