@@ -1,19 +1,18 @@
 
-DOMAIN ?= havelsan.io
+DOMAIN ?= dc01.havelsan.io
 
 COUNTRY :=TR
 STATE := Ankara
-COMPANY := HAVELSAN LocalDev
-
+COMPANY := HAVELSAN BOTAS
 # credits to: https://gist.github.com/fntlnz/cf14feb5a46b2eda428e000157447309
 
 # usage:
-# make rootCA.crt # (rootCA.key implicitly created)
+# make botasCA.crt # (botasCA.key implicitly created)
 # make DOMAIN=somedomain.dev somedomain.dev.csr somedomain.dev.crt   or   make DOMAIN=somedomain.dev
 # make DOMAIN=somedomain.dev verify-csr
 # make DOMAIN=somedomain.dev verify-crt
 
-# import rootCA.crt to the client (chrome)
+# import botasCA.crt to the client (chrome)
 # upload somedomain.dev.crt   and   somedomain.dev.key   to the host
 
 all: $(DOMAIN).csr $(DOMAIN).crt
@@ -40,8 +39,8 @@ $(DOMAIN).san.conf:
 	sh mksan.sh $(DOMAIN) $(COUNTRY) $(STATE) "$(COMPANY)" >$@
 
 $(DOMAIN).crt: $(DOMAIN).csr $(DOMAIN).san.conf
-	openssl x509 -req -in $(DOMAIN).csr -CA ./rootCA.crt -CAkey ./rootCA.key \
-		-CAcreateserial -out $@ -days 7300 -sha256 \
+	openssl x509 -req -in $(DOMAIN).csr -CA ../CA/botasCA.crt -CAkey ../CA/botasCA.key \
+		-CAcreateserial -out $@ -days 36500 -sha256 \
 		-extfile $(DOMAIN).san.conf -extensions req_ext
 
 # verify the certificate

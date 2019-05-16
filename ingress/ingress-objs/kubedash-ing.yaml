@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - kubedash.k8s.dc1.havelsan.io
-      secretName: k8s.dc1.havelsan.io
+      - kubedash.dc01.havelsan.io
+      secretName: dc01.havelsan.io
   rules:
-  - host: kubedash.k8s.dc1.havelsan.io
+  - host: kubedash.dc01.havelsan.io
     http:
       paths:
       - backend:

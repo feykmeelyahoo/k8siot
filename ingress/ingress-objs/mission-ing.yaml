@@ -2,17 +2,21 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: hvliot
-  namespace: default
+  name: mission
+  namespace: egys
   annotations:
     kubernetes.io/ingress.class: nginx                  # change to traefik if using traefik
     nginx.ingress.kubernetes.io/rewrite-target: /       # delete if using traefik
 spec:
+  tls:
+    - hosts:
+      - mission.dc01.havelsan.io
+      secretName: dc01.havelsan.io
   rules:
-  - host: hvliot.hvl.com
+  - host: mission.dc01.havelsan.io
     http:
       paths:
       - path: /
         backend:
-          serviceName: tb-service
-          servicePort: 8080
+          serviceName: task-manager
+          servicePort: 8083
