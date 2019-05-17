@@ -1,0 +1,77 @@
+#
+# Copyright © 2016-2018 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: postgis
+  name: postgis
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+      nodePort: 31432
+      name: psql
+  selector:
+    interface: postgis
+
+---
+apiVersion: "apps/v1"
+kind: StatefulSet
+metadata:
+  name: postgis
+spec:
+  serviceName: postgis
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgis
+  template:
+    metadata:
+      labels:
+        app: postgis
+        interface: postgis
+    spec:
+      containers:
+        - name: postgis
+          image: dockerepo.havelsan.io/botas/egys/postgis:9.5-2.2
+          env:
+            - name: ALLOW_IP_RANGE
+              value: 0.0.0.0/0      
+            - name: POSTGRES_USER
+              value: postgres1
+            - name: POSTGRES_PASS
+              value: postgres1
+            - name: POSTGRES_DBNAME
+              value: Turkiye_DB
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+              name: psql
+          volumeMounts:
+            - name: postgis-data
+              mountPath: /var/lib/postgresql
+  volumeClaimTemplates:
+    - metadata:
+        name: postgis-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: nfs-client
+        resources:
+          requests:
+            storage: 10Gi

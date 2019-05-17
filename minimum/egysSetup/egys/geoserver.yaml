@@ -1,0 +1,75 @@
+#
+# Copyright © 2016-2018 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geo-service
+  namespace: egys
+  labels:
+    app: geo-service
+spec:
+  ports:
+  - port: 8090
+    name: ui
+    nodePort: 31090
+  selector:
+    app: geo
+  type: NodePort
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: geo
+  namespace: egys
+spec:
+  serviceName: "geo-service"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: geo
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                    - geo-service
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: geoserver
+        imagePullPolicy: IfNotPresent
+        image: dockerepo.havelsan.io/botas/egys/geoserver:2.11.2
+        ports:
+        - containerPort: 8090
+          name: ui
+        volumeMounts:
+            - name: geoserver-data
+              mountPath: /opt/geoserver/data_dir
+  volumeClaimTemplates:
+    - metadata:
+        name: geoserver-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: nfs-client
+        resources:
+          requests:
+            storage: 60Gi

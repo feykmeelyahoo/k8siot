@@ -1,0 +1,64 @@
+#
+# Copyright © 2016-2018 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: task-manager
+  name: task-manager
+spec:
+  type: NodePort
+  ports:
+  - name: public
+    port: 8083
+  selector:
+    interface: task-manager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task-manager
+  template:
+    metadata:
+      labels:
+        app: task-manager
+        interface: task-manager
+    spec:
+      containers:
+      - name: task-manager
+        image: dockerepo.havelsan.io/botas/egys/taskmanager:1.0.0
+        imagePullPolicy: IfNotPresent
+        command:
+        - java
+        - -jar
+        - /task-manager.jar
+        ports:
+        - containerPort: 8083
+          name: public
+        env:
+        - name: POSTGRES_HOST
+          value: tm-postgres
+        - name: POSTGRES_USER
+          value: docker
+        - name: POSTGRES_PASSWORD
+          value: docker
+      restartPolicy: Always
