@@ -6,7 +6,7 @@ replicaCount: 1
 strategyType: Recreate
 
 image:
-  repository: dockerepo.havelsan.io/botas/external_storage/nfs-client-provisioner
+  repository: dockerepo.dc01.havelsan.io/botas/external_storage/nfs-client-provisioner
   tag: v3.1.0-k8s1.11
   pullPolicy: IfNotPresent
 

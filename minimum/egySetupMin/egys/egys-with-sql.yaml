@@ -53,7 +53,7 @@ metadata:
   name: egys-config
   namespace: egys
 data:
-  zookeeper.enabled: "false"
+  zookeeper.enabled: "true"
   audit_log.sink_type: "none"
   audit_log.sink_host: "audit-service"
   audit_log.sink_port: "8080"
@@ -62,7 +62,7 @@ data:
   egys_create_map_widget: "false"
   database.ts.type: "sql"
   database.entities.type: "sql"
-  postgresql.url: "jdbc:postgresql://egys-postgres:5432/thingsboard"
+  postgresql.url: "jdbc:postgresql://pg-egys:5432/thingsboard"
   cache.type: "redis"
   redis.host: "redis-service"
   ui-port: "8080"
@@ -98,7 +98,7 @@ spec:
       containers:
       - name: egys
         imagePullPolicy: IfNotPresent
-        image: egys/application:2.1.0
+        image: dockerepo.dc01.havelsan.io/botas/egys/application:2.3.0
         ports:
         - containerPort: 8080
           name: ui

@@ -86,7 +86,7 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       containers:
       - name: zk
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         image: dockerepo.dc01.havelsan.io/botas/zk:2.1.0
         ports:
         - containerPort: 2181
