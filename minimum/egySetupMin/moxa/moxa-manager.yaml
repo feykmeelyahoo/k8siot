@@ -56,7 +56,7 @@ spec:
         - name: THINGSBOARD_PORT
           value: "8080"
         - name: THINGSBOARD_AUTH_USER
-          value: "foas_tenant@havelsan.com.tr"
+          value: "tenant@thingsboard.org"
         - name: THINGSBOARD_AUTH_PASSWORD
-          value: "1234"
+          value: "tenant"
       restartPolicy: Always

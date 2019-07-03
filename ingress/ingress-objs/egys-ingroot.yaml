@@ -1,0 +1,22 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: egys2
+  namespace: egys
+  annotations:
+    kubernetes.io/ingress.class: nginx                  # change to traefik if using traefik
+    nginx.ingress.kubernetes.io/rewrite-target: /       # delete if using traefik
+spec:
+  tls:
+    - hosts:
+      - egys.dc20.havelsan.io
+      secretName: dnm
+  rules:
+  - host: egys.dc20.havelsan.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: egys-service
+          servicePort: 8080
