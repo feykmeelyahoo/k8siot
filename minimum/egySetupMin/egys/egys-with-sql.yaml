@@ -54,7 +54,7 @@ metadata:
   namespace: egys
 data:
   zookeeper.enabled: "true"
-  audit_log.sink_type: "none"
+  audit_log.sink_type: "egys"
   audit_log.sink_host: "audit-service"
   audit_log.sink_port: "8080"
   audit_log.kafka_brokers: "as-kafka:9092"
@@ -66,8 +66,8 @@ data:
   cache.type: "redis"
   redis.host: "redis-service"
   ui-port: "8080"
-  add_schema_and_system_data: "true"
-  add_demo_data: "true"
+  add_schema_and_system_data: "false"
+  add_demo_data: "false"
   keycloak.auth_provider_url: "http://10.151.102.217:8082"
   jwt.token_expire_time: "180000"
   jwt.refresh_token_expire_time: "360000"
@@ -98,7 +98,7 @@ spec:
       containers:
       - name: egys
         imagePullPolicy: IfNotPresent
-        image: dockerepo.dc01.havelsan.io/botas/egys/application:2.3.0
+        image: dockerepo.dc01.havelsan.io/botas/egys/application:2.4.5-SNAPSHOT-development-83
         ports:
         - containerPort: 8080
           name: ui

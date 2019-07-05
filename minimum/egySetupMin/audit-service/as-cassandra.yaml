@@ -80,7 +80,7 @@ spec:
               name: cql
           env:
             - name: CASSANDRA_SEEDS
-              value: as-cassandra-0.as-cassandra-headless.egys.svc.cluster.local
+              value: as-cassandra-0.as-cassandra-headless.egys.svc.cluster.havelsan
             - name: MAX_HEAP_SIZE
               value: 256M
             - name: HEAP_NEWSIZE
