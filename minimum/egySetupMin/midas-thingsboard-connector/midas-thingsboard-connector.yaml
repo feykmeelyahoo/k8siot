@@ -38,14 +38,6 @@ spec:
           value: mtc-kafka
         - name: MIDAS_PORT
           value: "9192"
-        - name: POSTGRES_HOST
-          value: mtc-postgres
-        - name: POSTGRES_PORT
-          value: "5432"
-        - name: REDIS_HOST
-          value: mtc-redis
-        - name: REDIS_PORT
-          value: "6379"
         - name: THINGSBOARD_HOST
           value: egys-service
         - name: THINGSBOARD_PASSWORD
@@ -54,7 +46,7 @@ spec:
           value: "8080"
         - name: THINGSBOARD_USER
           value: "foas_tenant@havelsan.com.tr"
-        image: dockerepo.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.1
+        image: dockerepo.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.2
         name: midas-thingsboard-connector
         ports:
         - containerPort: 8081
