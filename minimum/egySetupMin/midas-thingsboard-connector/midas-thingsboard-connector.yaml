@@ -55,12 +55,12 @@ spec:
         - name: THINGSBOARD_HOST
           value: egys-service
         - name: THINGSBOARD_PASSWORD
-          value: "1234"
+          value: "tenant"
         - name: THINGSBOARD_PORT
           value: "8080"
         - name: THINGSBOARD_USER
-          value: "foas_tenant@havelsan.com.tr"
-        image: dockerepo.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.2
+          value: "tenant@thingsboard.org"
+        image: dockerepo.dc01.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.2
         imagePullPolicy: Always
         name: midas-thingsboard-connector
         ports:
