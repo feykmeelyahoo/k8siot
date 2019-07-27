@@ -63,7 +63,7 @@ spec:
     spec:
       containers:
       - name: audit-service
-        image: dockerepo.dc01.havelsan.io/botas/audit-service/application:1.0.3
+        image: dockerepo.dc01.havelsan.io/botas/audit-service/application:1.0.5
         imagePullPolicy: IfNotPresent
         command:
         - /run-application.sh

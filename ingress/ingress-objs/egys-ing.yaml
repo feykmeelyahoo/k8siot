@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - egys.dc01.havelsan.io
-      secretName: dc01.havelsan.io
+      - egys.test.havelsan.io
+      secretName: test.havelsan.io
   rules:
-  - host: egys.dc01.havelsan.io
+  - host: egys.test.havelsan.io
     http:
       paths:
       - path: /
