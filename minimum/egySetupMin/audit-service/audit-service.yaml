@@ -24,7 +24,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8080
+    - port: 8090
       name: cql
   selector:
     interface: audit-service
@@ -42,7 +42,7 @@ spec:
   clusterIP: None
   ports:
   - name: public
-    port: 8080
+    port: 8090
   selector:
     interface: audit-service
 ---
@@ -63,12 +63,12 @@ spec:
     spec:
       containers:
       - name: audit-service
-        image: dockerepo.dc01.havelsan.io/botas/audit-service/application:1.0.5
+        image: dockerepo.dc01.havelsan.io/botas/audit-service/application:1.0.4
         imagePullPolicy: IfNotPresent
         command:
         - /run-application.sh
         ports:
-        - containerPort: 8080
+        - containerPort: 8090
           name: public
         env:
         - name: AUDIT_SERVICE_KAFKA_TOPICS

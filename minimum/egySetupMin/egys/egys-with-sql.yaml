@@ -56,7 +56,7 @@ data:
   zookeeper.enabled: "true"
   audit_log.sink_type: "egys"
   audit_log.sink_host: "audit-service"
-  audit_log.sink_port: "8080"
+  audit_log.sink_port: "8090"
   audit_log.kafka_brokers: "as-kafka:9092"
   zookeeper.url: "zk-headless"
   egys_create_map_widget: "false"
@@ -98,7 +98,7 @@ spec:
       containers:
       - name: egys
         imagePullPolicy: IfNotPresent
-        image: dockerepo.dc01.havelsan.io/botas/egys/application:2.4.5-SNAPSHOT-development-83
+        image: dockerepo.dc01.havelsan.io/botas/egys/application:2.4.5-SNAPSHOT-development-84
         ports:
         - containerPort: 8080
           name: ui

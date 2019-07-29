@@ -13,21 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: midas-thingsboard-connector
-  name: midas-thingsboard-connector
-spec:
-  type: NodePort
-  ports:
-  - name: "public"
-    nodePort: 31040
-    port: 8081
-  selector:
-    interface: midas-thingsboard-connector
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -65,7 +50,6 @@ spec:
         name: midas-thingsboard-connector
         ports:
         - containerPort: 8081
-        - containerPort: 4000
         resources: {}
       restartPolicy: Always
 status: {}
