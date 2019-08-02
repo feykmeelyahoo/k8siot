@@ -74,6 +74,7 @@ data:
   pgks_log_schema_name: "http"
   pgks_log_host: "85.105.122.24"
   pgks_log_port: "8012"
+  pgks_log_path: "/MIA.PGKSService/api/PGKS/"
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -215,7 +216,12 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: egys-config
-              key: pgks_log_port                            
+              key: pgks_log_port
+        - name: PGKS_LOG_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: egys-config
+              key: pgks_log_path                      
         command:
         - sh
         - -c
