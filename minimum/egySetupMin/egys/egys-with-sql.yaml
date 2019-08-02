@@ -204,6 +204,12 @@ spec:
             configMapKeyRef:
               name: egys-config
               key: pgks_log_schema_name
+        - name: PGKS_LOG_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: egys-config
+              key: pgks_log_host
+              
               
         command:
         - sh
