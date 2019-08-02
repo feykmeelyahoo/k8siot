@@ -73,6 +73,7 @@ data:
   jwt.refresh_token_expire_time: "360000"
   pgks_log_schema_name: "http"
   pgks_log_host: "85.105.122.24"
+  pgks_log_port: "8012"
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -210,7 +211,11 @@ spec:
             configMapKeyRef:
               name: egys-config
               key: pgks_log_host
-                            
+        - name: PGKS_LOG_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: egys-config
+              key: pgks_log_port                            
         command:
         - sh
         - -c
