@@ -71,6 +71,7 @@ data:
   keycloak.auth_provider_url: "http://10.151.102.217:8082"
   jwt.token_expire_time: "180000"
   jwt.refresh_token_expire_time: "360000"
+  pgks_log_schema_name: "http"
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -198,6 +199,12 @@ spec:
             configMapKeyRef:
               name: egys-config
               key: egys_create_map_widget
+        - name: PGKS_LOG_SCHEMA_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: egys-config
+              key: pgks_log_schema_name
+              
         command:
         - sh
         - -c
