@@ -55,7 +55,7 @@ spec:
       containers:
       - env:
         - name: KAFKA_ADVERTISED_LISTENERS
-          value: INSIDE://:9093,OUTSIDE://:9192,SIMULATOR://10.151.102.51:31292
+          value: INSIDE://:9093,OUTSIDE://:9192,SIMULATOR://10.151.102.58:31292
         - name: KAFKA_INTER_BROKER_LISTENER_NAME
           value: INSIDE
         - name: KAFKA_LISTENERS

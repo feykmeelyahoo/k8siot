@@ -102,7 +102,7 @@ spec:
       containers:
       - name: egys
         imagePullPolicy: IfNotPresent
-        image: dockerepo.dc01.havelsan.io/botas/egys/application:2.4.5-SNAPSHOT-development-84
+        image: dockerepo.dc01.havelsan.io/botas/egys/application:2.4.5-SNAPSHOT-development-85
         ports:
         - containerPort: 8080
           name: ui

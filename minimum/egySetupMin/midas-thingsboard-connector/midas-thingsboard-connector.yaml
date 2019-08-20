@@ -26,7 +26,7 @@ spec:
     nodePort: 31040
     port: 8081
   selector:
-    interface: midas-thingsboard-connector
+    app: midas-thingsboard-connector
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -60,7 +60,11 @@ spec:
           value: "8080"
         - name: THINGSBOARD_USER
           value: "tenant@thingsboard.org"
-        image: dockerepo.dc01.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.2
+        - name: MTC_REDIS_HOST
+          value: "mtc-redis"
+        - name: MTC_REDIS_PORT
+          value: "6379"
+        image: dockerepo.dc01.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.3
         imagePullPolicy: Always
         name: midas-thingsboard-connector
         ports:
