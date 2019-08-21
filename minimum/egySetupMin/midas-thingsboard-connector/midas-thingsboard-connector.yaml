@@ -35,7 +35,7 @@ metadata:
     app: midas-thingsboard-connector
   name: midas-thingsboard-connector
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: midas-thingsboard-connector
@@ -64,7 +64,7 @@ spec:
           value: "mtc-redis"
         - name: MTC_REDIS_PORT
           value: "6379"
-        image: dockerepo.dc01.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.3
+        image: dockerepo.dc01.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.4
         imagePullPolicy: Always
         name: midas-thingsboard-connector
         ports:
