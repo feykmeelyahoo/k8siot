@@ -1,0 +1,24 @@
+[
+  {
+    "_id": "583af560-5559-11e9-897f-93888b0d4e4b",
+    "_type": "search",
+    "_source": {
+      "title": "Kubernetes Cluster Logs",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "kubernetes.pod_name",
+        "log",
+        "kubernetes.host"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"1f485a40-5554-11e9-897f-93888b0d4e4b\",\"highlightAll\":true,\"version\":true,\"query\":{\"language\":\"lucene\",\"query\":\"\"},\"filter\":[]}"
+      }
+    }
+  }
+]
