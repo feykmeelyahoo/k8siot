@@ -64,8 +64,6 @@ spec:
         volumeMounts:
             - name: geoserver-data
               mountPath: /opt/geoserver/data_dir
-      nodeSelector:
-        kubernetes.io/hostname: 'kube-node-03'        
   volumeClaimTemplates:
     - metadata:
         name: geoserver-data

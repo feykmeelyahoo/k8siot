@@ -64,7 +64,7 @@ spec:
           value: "mtc-redis"
         - name: MTC_REDIS_PORT
           value: "6379"
-        image: dockerepo.dc01.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.4
+        image: dockerepo.dc01.havelsan.io/botas/egys/midas-thingsboard-connector:1.0.5
         imagePullPolicy: Always
         name: midas-thingsboard-connector
         ports:
