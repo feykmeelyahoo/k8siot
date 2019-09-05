@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - mission.dc01.havelsan.io
-      secretName: dc01.havelsan.io
+      - mission.test.havelsan.io
+      secretName: test.havelsan.io
   rules:
-  - host: mission.dc01.havelsan.io
+  - host: mission.test.havelsan.io
     http:
       paths:
       - path: /
