@@ -64,6 +64,8 @@ spec:
           value: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,SIMULATOR:PLAINTEXT
         - name: KAFKA_ZOOKEEPER_CONNECT
           value: mtc-zk-headless
+        - name: KAFKA_BROKER_ID
+          value: "100"
         image: wurstmeister/kafka
         name: mtc-kafka
         ports:
