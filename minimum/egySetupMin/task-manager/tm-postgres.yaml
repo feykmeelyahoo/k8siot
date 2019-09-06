@@ -62,7 +62,7 @@ spec:
               name: psql
           volumeMounts:
             - name: tm-postgres-data
-              mountPath: /var/lib/postgresql
+              mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:
     - metadata:
         name: tm-postgres-data
