@@ -82,6 +82,11 @@ helm reset
 rm -rf ~/.helm
 kubectl delete -f rbac-tiller.yaml   # bizde helm directory'sinde bulunuyor
 ```
+## Activate auto oh_my_zsh auto completions 
+## Add after plugins and source ohmyzsh
+autoload -U compinit
+compinit
+
 ## Vagrant box oluşturma-- sonrasında hosts ve /etc/default/kubeleti editle
 ```console
 vagrant package --base <<preconfigured_vm>> --output mybox.box
