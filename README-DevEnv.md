@@ -84,8 +84,10 @@ kubectl delete -f rbac-tiller.yaml   # bizde helm directory'sinde bulunuyor
 ```
 ## Activate auto oh_my_zsh auto completions 
 ## Add after plugins and source ohmyzsh
+```console
 autoload -U compinit
 compinit
+```
 
 ## Vagrant box oluşturma-- sonrasında hosts ve /etc/default/kubeleti editle
 ```console
