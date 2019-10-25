@@ -94,3 +94,10 @@ compinit
 vagrant package --base <<preconfigured_vm>> --output mybox.box
 vagrant box add --name="boxname" mybox.box
 ```
+## Vagrant default: Warning: Authentication failure. Retrying...
+```console
+wget --no-check-certificate https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub -O /home/vagrant/.ssh/authorized_keys  
+chmod 0700 /home/vagrant/.ssh 
+chmod 0600 /home/vagrant/.ssh/authorized_keys  
+chown -R vagrant /home/vagrant/.ssh
+```
